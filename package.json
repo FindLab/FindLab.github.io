@@ -1,15 +1,15 @@
 {
-  "name": "FindLab.github.io",
+  "name": "findlab.github.io",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "build": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
-    "server": "hexo server"
+    "serve": "hexo server"
   },
   "hexo": {
-    "version": ""
+    "version": "4.2.0"
   },
   "dependencies": {
     "hexo": "^4.0.0",
