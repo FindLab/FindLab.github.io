@@ -7,7 +7,7 @@ branches:
   only:
     - develop
 script:
-  - hexo generate # generate static files
+  - npm run build # generate static files
 deploy:
   provider: pages
   skip-cleanup: true
