@@ -3,3 +3,6 @@ favicon:
   small: /images/favicon-16x16-find.png
   medium: /images/favicon-32x32-find.png
   apple_touch_icon: /images/favicon-64x64-find.png
+
+links:
+  Find智慧钢琴: https://www.findpiano.cn/
