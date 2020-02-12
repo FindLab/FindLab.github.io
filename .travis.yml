@@ -5,7 +5,7 @@ node_js:
 cache: npm
 branches:
   only:
-    - develop
+    - release
 script:
   - npm run build # generate static files
 deploy:
@@ -14,6 +14,6 @@ deploy:
   github-token: $GH_TOKEN
   keep-history: true
   on:
-    branch: develop
+    branch: release
   local-dir: public
   target_branch: master
