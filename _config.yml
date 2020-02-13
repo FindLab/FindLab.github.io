@@ -102,6 +102,6 @@ theme: next
 deploy:
   type: ''
 
-gitinfo:
-  - avatar_url
-  - html_url
+#gitinfo:
+#  - avatar_url
+#  - html_url

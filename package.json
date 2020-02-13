@@ -6,7 +6,8 @@
     "build": "cpx \"node_modules/hexo-theme-next/**/*\" themes/next && hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
-    "serve": "hexo server"
+    "serve": "hexo server",
+    "serve:draft": "hexo server --draft"
   },
   "hexo": {
     "version": "4.2.0"

@@ -13,9 +13,7 @@ avatar:
 
 coauthors:
   [k-l-lambda]:
-    # It will display nick
     nick: K.L.
-    # When your co-authors is click, will jump to there
     link: https://k-l-lambda.github.io/
 
 math:
