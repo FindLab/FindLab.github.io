@@ -8,7 +8,9 @@ subtitle: ''
 description: ''
 keywords:
 author: FindLab
-language: en
+language:
+- en
+- zh-cn
 timezone: ''
 
 # URL

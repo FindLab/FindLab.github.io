@@ -1,6 +1,5 @@
 ---
 author: k-l-lambda
-email: k-l-lambda@gmail.com
 coauthor: k-l-lambda
 title: A Sample Post
 mathjax: true
