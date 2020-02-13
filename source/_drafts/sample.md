@@ -256,3 +256,15 @@ E=mc^2
 $$\begin{equation}\label{eq2}
 e^{i \pi}=-1
 \end{equation}$$
+
+This is a multi-lines block:
+
+$$
+\begin{aligned}
+\sqrt{i} &= \sqrt{\cos{\frac{\pi}{2}} + i\sin{\frac{\pi}{2}}} \\\\
+& = \sqrt{e^{i \cdot \frac{\pi}{2}}} \\\\
+& = e^{i \cdot \frac{\pi}{4}} \\\\
+& = \cos{\frac{\pi}{4} + i\sin{\frac{\pi}{4}}} \\\\
+& = \frac{\sqrt{2}}{2} + \frac{\sqrt{2}}{2}i
+\end{aligned}
+$$
