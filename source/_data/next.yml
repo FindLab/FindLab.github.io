@@ -6,3 +6,18 @@ favicon:
 
 links:
   Find智慧钢琴: https://www.findpiano.cn/
+
+avatar:
+  url: /images/favicon-64x64-find.png
+
+
+coauthors:
+  [k-l-lambda]:
+    # It will display nick
+    nick: K.L.
+    # When your co-authors is click, will jump to there
+    link: https://k-l-lambda.github.io/
+
+math:
+  mathjax:
+    enable: true
