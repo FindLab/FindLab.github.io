@@ -244,7 +244,7 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 
 ## Math Expressions
 
-This is an inline latext, $\sqrt{a^2+b^2}$, that's it.
+This is an inline latex, $\sqrt{a^2+b^2}$, that's it.
 
 These are latex blocks:
 
