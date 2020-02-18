@@ -8,5 +8,5 @@ tags:
 ---
 
 Here, [we](/about/) founded [this blog](https://findlab.github.io/),
-and we will successively publish some novel ideas and discussions on topic of deep leaning, music related algorithm and piano.
+and we will successively publish some novel ideas and discussions on topic of deep learning, music related algorithm and piano.
 Thanks for your reading, enjoy&#x1F60E;.
