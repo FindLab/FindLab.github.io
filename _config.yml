@@ -104,3 +104,13 @@ deploy:
 
 kramed:
   breaks: false
+
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  content: true
+  content_limit: 200
+  content_limit_delim: ' '
+  order_by: -date
+  icon: /images/favicon-64x64-find.png
