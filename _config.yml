@@ -10,7 +10,7 @@ keywords:
 author: FindLab
 language:
 - en
-- zh-cn
+- zh-CN
 timezone: ''
 
 # URL
@@ -102,6 +102,5 @@ theme: next
 deploy:
   type: ''
 
-#gitinfo:
-#  - avatar_url
-#  - html_url
+kramed:
+  breaks: false
