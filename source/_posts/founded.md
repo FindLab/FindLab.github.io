@@ -2,7 +2,7 @@
 author: k-l-lambda
 coauthor: k-l-lambda
 email: k-l-lambda@gmail.com
-title: FindLab Blog Founded
+title: FindLab blog founded
 date: 2020-02-18 20:03:42
 tags:
 ---
