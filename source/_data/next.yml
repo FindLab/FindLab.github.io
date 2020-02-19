@@ -38,3 +38,6 @@ coauthors:
 math:
   mathjax:
     enable: true
+
+custom_file_path:
+  style: source/_data/styles.styl
