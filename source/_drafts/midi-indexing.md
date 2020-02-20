@@ -2,7 +2,7 @@
 author: k-l-lambda
 coauthor: k-l-lambda
 email: k-l-lambda@gmail.com
-title: A proposal for content based MIDI files indexing and retrieving on piano
+title: A proposal for content based MIDI files indexing and retrieving on digital piano
 tags:
 - music
 - midi
@@ -28,12 +28,24 @@ Imaginary scenes above are comming true. Now let's talk about some ideas for imp
 
 <!-- more -->
 
-## Related works
+## Related work
 
 Early in 1999, Cavalcanti et al. proposed a MIDI indexing system scheme[^1].
-The system converts a melody notes sequence into a sequence of 7 dimensional[^2] feature vectors,
-and then match query melody notes by measuring Euclidean distance between feature vectors.
+The system converts a melody notes sequence into a new sequence of 7 dimensional[^2] wavelet transformed vectors,
+then match query melody notes by measuring Euclidean distance between feature vectors.
+This scheme has several advantages:
+
+* Local matching. Query moledy can be a short fragment, whose length is just enough to distinguish source music from other similar ones.
+
+* Key insensitive, i.e. the query notes can be on a different key with source moledy.
+Because wavelet transformed vectors only extract relative pitch information.
+
+* Pitch error tolerant. Euclidean distance magnitude of feature vectors reflect the similarity of melody fragments.
+If query notes have slight off-pitch from correct source notes, distance loss will keep tiny.
+
+However, on a particular purpose, there are some issues in this scheme:
 
 
+---
 [^1]: paper: [MIDIZ: content based indexing and retrieving MIDI files](http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0104-65001999000300002)
 [^2]: MIDIZ use 2<sup>k</sup>-1 dimensional vectors, usually set k=3.
