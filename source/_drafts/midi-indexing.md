@@ -32,7 +32,7 @@ Imaginary scenes above are comming true. Now let's talk about some ideas for imp
 
 Early in 1999, Cavalcanti et al. proposed a MIDI indexing system scheme[^1].
 The system converts a melody notes sequence into a new sequence of 7 dimensional[^2] wavelet transformed vectors,
-then match query melody notes by measuring Euclidean distance between feature vectors.
+then match a piece of query melody notes by measuring Euclidean distance between feature vectors.
 This scheme has several advantages:
 
 * Local matching. Query melody can be a short fragment, whose length is just enough to distinguish source music from other similar ones.
@@ -44,6 +44,19 @@ Because wavelet transformed vectors only extract relative pitch information.
 If query melody have slight off-pitch from correct source melody, distance loss will keep tiny.
 
 However, on our particular purpose of piano playing, there are some issues in this scheme:
+
+* Wavelet transform is performing on a single melody line, while a piano music opus usually has rich harmony voices,
+and splitting melody voice from the whole music texture is troublesome:
+some multiple voices music piece has no definite main melody line,
+some MIDI files made from piano staff splits tracks by left/right hand, not voices.
+
+* Furthermore, harmony voices are meaningful.
+Most of popular songs have multiple versions which sharing the same melody, but with different harmony arrangement.
+Query notes in harmony voice can be just the fingerprint of user searching goal.
+
+* The notes sequence processing is sensitive with omit/extra note.
+Though a deviated note can be tolerant by this scheme, but omit/extra ones are not.
+Because note count change will break fragment splitting, especially when interval between 2 errors is shorter than 2<sup>k</sup>.
 
 
 ---
