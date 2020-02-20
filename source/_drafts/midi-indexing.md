@@ -35,15 +35,15 @@ The system converts a melody notes sequence into a new sequence of 7 dimensional
 then match query melody notes by measuring Euclidean distance between feature vectors.
 This scheme has several advantages:
 
-* Local matching. Query moledy can be a short fragment, whose length is just enough to distinguish source music from other similar ones.
+* Local matching. Query melody can be a short fragment, whose length is just enough to distinguish source music from other similar ones.
 
-* Key insensitive, i.e. the query notes can be on a different key with source moledy.
+* Key insensitive, i.e. the query melody can be on a different key with source melody.
 Because wavelet transformed vectors only extract relative pitch information.
 
 * Pitch error tolerant. Euclidean distance magnitude of feature vectors reflect the similarity of melody fragments.
-If query notes have slight off-pitch from correct source notes, distance loss will keep tiny.
+If query melody have slight off-pitch from correct source melody, distance loss will keep tiny.
 
-However, on a particular purpose, there are some issues in this scheme:
+However, on our particular purpose of piano playing, there are some issues in this scheme:
 
 
 ---
