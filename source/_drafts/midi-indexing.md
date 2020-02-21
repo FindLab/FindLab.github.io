@@ -45,18 +45,18 @@ If query melody have slight off-pitch from correct source melody, distance loss 
 
 However, on our particular purpose of piano playing, there are some issues in this scheme:
 
-* Wavelet transform is performing on a single melody line, while a piano music opus usually has rich harmony voices,
+* Wavelet transform is performing on a single melody line, while a piano music opus usually has rich harmony texture,
 and splitting melody voice from the whole music texture is troublesome:
-some multiple voices music piece has no definite main melody line,
+some polyphony music piece has no definite main melody line,
 some MIDI files made from piano staff splits tracks by left/right hand, not voices.
 
 * Furthermore, harmony voices are meaningful.
-Most of popular songs have multiple versions which sharing the same melody, but with different harmony arrangement.
+Most of popular songs have serval versions sharing the same melody, but with different harmony arrangement.
 Query notes in harmony voice can be just the fingerprint of user searching goal.
 
 * The notes sequence processing is sensitive with omit/extra note.
 Though a deviated note can be tolerant by this scheme, but omit/extra ones are not.
-Because note count change will break fragment splitting, especially when interval between 2 errors is shorter than 2<sup>k</sup>.
+Because note count change will break fragment splitting, especially when interval between 2 errors is less than 2<sup>k</sup>.
 
 
 ---
