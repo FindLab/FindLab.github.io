@@ -3,16 +3,19 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "cpx \"node_modules/hexo-theme-next/**/*\" themes/next && hexo generate",
+    "build": "cpx \"node_modules/hexo-theme-next/**/*\" themes/next && vue-cli-service build && hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "serve": "hexo server",
-    "serve:draft": "hexo server --draft"
+    "serve:draft": "hexo server --draft",
+    "vue-build": "vue-cli-service build",
+    "vue-serve": "vue-cli-service serve"
   },
   "hexo": {
     "version": "4.2.0"
   },
   "dependencies": {
+    "core-js": "^3.4.4",
     "hexo": "^4.0.0",
     "hexo-author": "^1.1.2",
     "hexo-generator-archive": "^1.0.0",
@@ -25,12 +28,25 @@
     "hexo-renderer-kramed": "^0.1.4",
     "hexo-renderer-stylus": "^1.1.0",
     "hexo-server": "^1.0.0",
-    "hexo-theme-next": "theme-next/hexo-theme-next"
+    "hexo-theme-next": "theme-next/hexo-theme-next",
+    "vue": "^2.6.10",
+    "vue-class-component": "^7.0.2",
+    "vue-property-decorator": "^8.3.0"
   },
   "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.1.0",
+    "@vue/cli-plugin-eslint": "^4.1.0",
+    "@vue/cli-service": "^4.1.0",
+    "babel-eslint": "^10.0.3",
     "cpx": "^1.5.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
     "gulp": "^4.0.2",
     "gulp-eslint": "^6.0.0",
-    "gulp-shell": "^0.8.0"
+    "gulp-shell": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.0",
+    "typescript": "~3.5.3",
+    "vue-template-compiler": "^2.6.10"
   }
 }

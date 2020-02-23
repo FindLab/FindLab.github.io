@@ -270,3 +270,11 @@ $$
 & = \frac{\sqrt{2}}{2} + \frac{\sqrt{2}}{2}i
 \end{aligned}
 $$
+
+
+## Vue.js
+
+<div id="sample"></div>
+
+<script src="/vue/chunk-vendors.js"></script>
+<script src="/vue/sample.js">
