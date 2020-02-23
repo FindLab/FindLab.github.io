@@ -67,6 +67,16 @@ I hope there is another opportunity to talk details of the score following metho
 
 ## Pitch histogram indexing
 
+A score following program is an agent to guess where place in a specific music score, the user is playing at right now.
+As hint by the word *guess* (or *fuzzy*), the program will output a confidence value to tell how confident it believes its result.
+Now, what if we use a wrong score? Obviously, any possible guessing won't be with high confidence.
+Maybe some fragment in user playing sequence is similar with the (wrongly) specific score, but the matching must be highly fragmentized.
+If we measure the continuous following length with a proper confidence threshold, a normal score following will completely beat a wrong score following.
+So we have a touchstone to check how well a music score match with what user are playing, and if we run this program on all scores we have,
+we are able to pick the best matching score by results sorting. Certainly, it's not practicable &#x1f604;.
+However, if we sieve off those obvious impossible candidates, and a small left magnitude can be affordable.
+
+
 
 ---
 [^1]: paper: [MIDIZ: content based indexing and retrieving MIDI files](http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0104-65001999000300002)
