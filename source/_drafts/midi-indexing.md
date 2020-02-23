@@ -3,6 +3,7 @@ author: k-l-lambda
 coauthor: k-l-lambda
 email: k-l-lambda@gmail.com
 title: A proposal for content based MIDI files indexing and retrieving on digital piano
+mathjax: true
 tags:
 - music
 - midi
@@ -60,21 +61,48 @@ Though a deviated note can be tolerant by this scheme, but omit/extra ones are n
 Because note count change will break fragment splitting, especially when interval between 2 errors is less than fragment length 2<sup>k</sup>.
 
 We propose a new approach to deal with MIDI retrieving with input interface of piano playing, which partitions this task into 2 phases:
-pitch histogram indexing and music fuzzy matching. The second phase is also a robust score following algorithm,
-which play a key role in the smart piano user interactive system, a pending patent.
-I hope there is another opportunity to talk details of the score following method. Now we focus on the first phase.
+pitch histogram indexing (rough phase) and music fuzzy matching (fine phase). The fine phase is also a robust score following algorithm,
+which play a key role in the smart piano user interactive system, also a pending patent.
+I hope there is another opportunity to talk details of the score following method. In this article we focus on the rough phase.
 
 
-## Pitch histogram indexing
+## How does it work
 
 A score following program is an agent to guess where place in a specific music score, the user is playing at right now.
 As hint by the word *guess* (or *fuzzy*), the program will output a confidence value to tell how confident it believes its result.
-Now, what if we use a wrong score? Obviously, any possible guessing won't be with high confidence.
-Maybe some fragment in user playing sequence is similar with the (wrongly) specific score, but the matching must be highly fragmentized.
-If we measure the continuous following length with a proper confidence threshold, a normal score following will completely beat a wrong score following.
-So we have a touchstone to check how well a music score match with what user are playing, and if we run this program on all scores we have,
-we are able to pick the best matching score by results sorting. Certainly, it's not practicable &#x1f604;.
+
+Now, what if we use a wrong score? Obviously, any possible guessing won't be with a high confidence.
+Maybe some fragment in user playing sequence is similar with the (wrongly) specific score someplace, but the matching must be highly fragmentized.
+If we measure the typical continuous following length with a proper confidence threshold, a normal score following will completely beat a wrong score following.
+
+So we have a touchstone to check how well a music score match what user are playing, and if we run this program on all scores we have simultaneously,
+we are able to pick the best matching score by results sorting. Certainly, it's not practicable&#x1f604;.
 However, if we sieve off those obvious impossible candidates, and a small left magnitude can be affordable.
+So this is the rough phase, the design aim is fast and concurrency, not precise. And for possible candidates, rather let it go than kill.
+
+To construct a MIDI indexing, available properties of music piece include pitch, time and velocity (strength).
+Velocity/strength is out firstly because its highly mutable.
+Time property is valuable to identify a score, but the time data to record human playing is usually in millisecond or microsecond,
+which is very continuous (not as discrete as pitch on keyboard instrument), and difficult to extract identify information.
+However, the time information utilizing is an open problem to exploit in future.
+
+Inevitably, pitch is the last option.
+To fast index scores, we convert the pitch characteristic of a whole candidate score (or user playing) notes into serval integer numbers.
+The filter operation, pass or fail judgement is done by binary number calculation, which is fast and constant with single score length
+(O(n) with candidate score count, but can be optimized by concurrency).
+
+The pitch characteristic is accumulatable with notes, and a music piece with more notes has stronger characteristic,
+i.e. as user keep playing, more and more candidate scores will be sieved off.
+Once candidate score count is lower than affordable line, we will run the fine phase.
+
+We define an efficiency benchmark:
+
+$$ \textrm{filter stregth} := 1 - \frac{\textrm{left candidate count}}{\textrm{total candidate count}} $$
+
+As long as we didn't miss the possible goal score, we will do our best to enhance filter strength.
+
+
+## Pitch histogram indexing
 
 
 
