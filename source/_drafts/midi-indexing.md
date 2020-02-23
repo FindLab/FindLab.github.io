@@ -28,6 +28,7 @@ Imaginary scenes above are comming true. Now let's talk about some ideas for imp
 
 <!-- more -->
 
+
 ## Related work
 
 Early in 1999, Cavalcanti et al. proposed a MIDI indexing system scheme[^1].
@@ -56,7 +57,15 @@ Query notes in harmony voice can be just the fingerprint of user searching goal.
 
 * The notes sequence processing is sensitive with omit/extra note.
 Though a deviated note can be tolerant by this scheme, but omit/extra ones are not.
-Because note count change will break fragment splitting, especially when interval between 2 errors is less than 2<sup>k</sup>.
+Because note count change will break fragment splitting, especially when interval between 2 errors is less than fragment length 2<sup>k</sup>.
+
+We propose a new approach to deal with MIDI retrieving with input interface of piano playing, which partitions this task into 2 phases:
+pitch histogram indexing and music fuzzy matching. The second phase is also a robust score following algorithm,
+which play a key role in the smart piano user interactive system, a pending patent.
+I hope there is another opportunity to talk details of the score following method. Now we focus on the first phase.
+
+
+## Pitch histogram indexing
 
 
 ---
