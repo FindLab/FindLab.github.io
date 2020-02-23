@@ -99,7 +99,7 @@ We define an efficiency benchmark:
 
 $$ \textrm{filter stregth} := 1 - \frac{\textrm{left candidate count}}{\textrm{total candidate count}} $$
 
-As long as we didn't miss the possible goal score, we will do our best to enhance filter strength.
+As long as we didn't miss the potential goal score, we will do our best to enhance filter strength.
 
 
 ## Pitch histogram indexing
