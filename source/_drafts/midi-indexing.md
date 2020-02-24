@@ -17,8 +17,8 @@ tags:
 ## Motivation
 
 Imagine you have a smart piano at home, which connected with a huge music staff library.
-Once a time, you wanna play some muic opus on a whim, and it's so bothering that retrieve music staff in either category menus or a long favorite list,
-so you just play by memory directly.
+Once, you wanna play some muic opus on a whim, and it's so bothering to retrieve music staff in either category menus or a long favorite list,
+that you just play by memory directly.
 But the piano is so smart, just a few seconds later, it understands what you are playing, and displays the staff automatically.
 
 Another case. You see a nice piano when hanging out downtown, and you are just in a mood to play a music and show your talent to passers.
