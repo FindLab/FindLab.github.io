@@ -2,23 +2,28 @@
 //const htmlCommonTemplate = "./app/html/CommonTemplate.html";
 
 
+const entries = [
+	"sample",
+	"midi-player",
+];
+
+
 
 module.exports = {
 	publicPath: "./",
 	outputDir: "./source/vue",
 	filenameHashing: false,
-	pages: {
-		sample: {
-			entry: "./app/sample.js",
-			//template: htmlCommonTemplate,
-		},
-	},
+	pages: entries.reduce((table, name) => ({...table, [name]: {
+		entry: `./app/${name}.js`,
+	}}), {}),
 	chainWebpack: config => {
 		config.output.filename("./[name].js");
 		config.output.chunkFilename("./[name].js");
 
-		config.plugins.delete("html-sample");
-		config.plugins.delete("preload-sample");
-		config.plugins.delete("prefetch-sample");
+		entries.forEach(name => {
+			config.plugins.delete(`html-${name}`);
+			config.plugins.delete(`preload-${name}`);
+			config.plugins.delete(`prefetch-${name}`);
+		});
 	},
 };
