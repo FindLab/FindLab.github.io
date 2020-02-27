@@ -104,8 +104,16 @@ As long as we didn't miss the potential goal score, we will do our best to enhan
 
 ## Pitch histogram indexing
 
+<div class="vue-component midi-player" data-url="/midi/Minuets_in_G_major.mid"></div>
+
 
 
 ---
 [^1]: paper: [MIDIZ: content based indexing and retrieving MIDI files](http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0104-65001999000300002)
 [^2]: MIDIZ use 2<sup>k</sup>-1 dimensional vectors, usually set k=3.
+
+
+
+<script src="/vue/chunk-vendors.js"></script>
+<script src="/vue/midi-player.js">
+<link rel="stylesheet" type="text/css" href="/vue/css/chunk-vendors.css" />
