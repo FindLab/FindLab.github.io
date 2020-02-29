@@ -5,7 +5,7 @@
 		/>
 		<div v-if="player" class="controls">
 			<div>
-				<button v-show="player.progressTime > 0" @click="player.turnCursor(0); player.pause();">&#x23ee;</button>
+				<button v-show="player.progressTime > 0" @click="onReset">&#x23ee;</button>
 				<button v-show="!player.isPlaying" @click="player.play()">&#x25b6;</button>
 				<button v-show="player.isPlaying" @click="player.pause()">&#x23f8;</button>
 			</div>
@@ -15,6 +15,10 @@
 
 <script>
 	import {MidiRoll, MIDI, MidiPlayer, MidiAudio} from "@k-l-lambda/web-widgets";
+
+
+
+	const msDelay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 
 
@@ -49,7 +53,6 @@
 
 
 		async created () {
-			//console.log("midi-player:", this.url);
 			const buffer = await (await fetch(this.url)).arrayBuffer();
 			const midi = MIDI.parseMidiData(buffer);
 
@@ -67,12 +70,10 @@
 
 
 		methods: {
-			onMidi (data, timestamp) {
-				//console.log("onMidi:", data.subtype, timestamp, data);
+			async onMidi (data, timestamp) {
+				const delay = (timestamp - performance.now()) * 1e-3;	// in seconds
 
 				if (!MidiAudio.WebAudio.empty()) {
-					const delay = (timestamp - performance.now()) * 1e-3;	// in seconds
-
 					switch (data.subtype) {
 					case "noteOn":
 						MidiAudio.noteOn(data.channel, data.noteNumber, data.velocity, delay);
@@ -84,12 +85,29 @@
 						break;
 					}
 				}
+
+				await msDelay(delay);
+
+				if (this.player && this.player.isPlaying)
+					this.$emit("midi", data);
 			},
 
 
 			onFinish () {
-				if (this.player)
+				//if (this.player)
+				//	this.player.turnCursor(0);
+
+				this.$emit("finish");
+			},
+
+
+			onReset () {
+				if (this.player) {
 					this.player.turnCursor(0);
+					this.player.pause();
+
+					this.$emit("reset");
+				}
 			},
 		},
 	};

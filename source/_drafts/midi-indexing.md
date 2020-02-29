@@ -99,12 +99,12 @@ We define an efficiency benchmark:
 
 $$ \textrm{filter stregth} := 1 - \frac{\textrm{left candidate count}}{\textrm{total candidate count}} $$
 
-As long as we didn't miss the potential goal score, we will do our best to enhance filter strength.
+As long as we didn't miss the potential goal score, we will enhance filter strength as well as we can.
 
 
 ## Pitch histogram indexing
 
-<div class="vue-component midi-player" data-url="/midi/Minuets_in_G_major.mid"></div>
+<div class="vue-component midi-pitches-mask" data-midi-url="/midi/Minuets_in_G_major.mid"></div>
 
 
 
@@ -115,5 +115,5 @@ As long as we didn't miss the potential goal score, we will do our best to enhan
 
 
 <script src="/vue/chunk-vendors.js"></script>
-<script src="/vue/midi-player.js"></script>
+<script src="/vue/midi-pitches-mask.js"></script>
 <script src="/vue/soundfont-loader.js"></script>
