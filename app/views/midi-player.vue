@@ -1,9 +1,11 @@
 <template>
 	<div class="midi-player">
-		<MidiRoll :player="player" :timeScale="timeScale" />
+		<MidiRoll :player="player" :timeScale="timeScale"
+			:width="width" :height="height"
+		/>
 		<div v-if="player" class="controls">
 			<div>
-				<button v-show="player.progressTime > 0" @click="player.turnCursor(0)">&#x23ee;</button>
+				<button v-show="player.progressTime > 0" @click="player.turnCursor(0); player.pause();">&#x23ee;</button>
 				<button v-show="!player.isPlaying" @click="player.play()">&#x25b6;</button>
 				<button v-show="player.isPlaying" @click="player.pause()">&#x23f8;</button>
 			</div>
@@ -24,7 +26,11 @@
 			url: String,
 			timeScale: {
 				type: Number,
-				default: 2e-3,
+				default: 4e-3,
+			},
+			height: {
+				type: Number,
+				default: 200,
 			},
 		},
 
@@ -37,6 +43,7 @@
 		data () {
 			return {
 				player: null,
+				width: 600,
 			};
 		},
 
@@ -48,8 +55,14 @@
 
 			this.player = new MidiPlayer(midi, {
 				onMidi: (data, timestamp) => this.onMidi(data, timestamp),
-				//onPlayFinish: () => this.onFinish(),
+				onPlayFinish: () => this.onFinish(),
 			});
+		},
+
+
+		mounted () {
+			this.width = this.$el.clientWidth;
+			window.addEventListener("resize", () => this.width = this.$el.clientWidth);
 		},
 
 
@@ -71,6 +84,12 @@
 						break;
 					}
 				}
+			},
+
+
+			onFinish () {
+				if (this.player)
+					this.player.turnCursor(0);
 			},
 		},
 	};
