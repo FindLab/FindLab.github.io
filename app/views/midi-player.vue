@@ -1,11 +1,18 @@
 <template>
-	<div>
-		<MidiRoll :midiURL="url" :timeScale="timeScale" />
+	<div class="midi-player">
+		<MidiRoll :player="player" :timeScale="timeScale" />
+		<div v-if="player" class="controls">
+			<div>
+				<button v-show="player.progressTime > 0" @click="player.turnCursor(0)">&#x23ee;</button>
+				<button v-show="!player.isPlaying" @click="player.play()">&#x25b6;</button>
+				<button v-show="player.isPlaying" @click="player.pause()">&#x23f8;</button>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
-	import {MidiRoll} from "@k-l-lambda/web-widgets";
+	import {MidiRoll, MIDI, MidiPlayer, MidiAudio} from "@k-l-lambda/web-widgets";
 
 
 
@@ -27,8 +34,88 @@
 		},
 
 
-		/*mounted () {
-			console.log("midi-player:", this.url);
-		},*/
+		data () {
+			return {
+				player: null,
+			};
+		},
+
+
+		async created () {
+			//console.log("midi-player:", this.url);
+			const buffer = await (await fetch(this.url)).arrayBuffer();
+			const midi = MIDI.parseMidiData(buffer);
+
+			this.player = new MidiPlayer(midi, {
+				onMidi: (data, timestamp) => this.onMidi(data, timestamp),
+				//onPlayFinish: () => this.onFinish(),
+			});
+		},
+
+
+		methods: {
+			onMidi (data, timestamp) {
+				//console.log("onMidi:", data.subtype, timestamp, data);
+
+				if (!MidiAudio.WebAudio.empty()) {
+					const delay = (timestamp - performance.now()) * 1e-3;	// in seconds
+
+					switch (data.subtype) {
+					case "noteOn":
+						MidiAudio.noteOn(data.channel, data.noteNumber, data.velocity, delay);
+
+						break;
+					case "noteOff":
+						MidiAudio.noteOff(data.channel, data.noteNumber, delay);
+
+						break;
+					}
+				}
+			},
+		},
 	};
 </script>
+
+<style scoped>
+	.midi-player
+	{
+		position: relative;
+		overflow: hidden;
+	}
+
+	.controls
+	{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		transition: opacity .3s;
+		opacity: 0;
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		background: #0001;
+	}
+
+	.controls:hover
+	{
+		opacity: 1;
+	}
+
+	.controls button
+	{
+		font-size: 30px;
+		width: 60px;
+		background: #fffc;
+		border: 0;
+		outline: 0;
+		border-radius: 50%;
+		cursor: pointer;
+		padding: 10px;
+		justify-content: center;
+		box-shadow: 0 0 16px black;
+		margin: 0 1em;
+	}
+</style>
