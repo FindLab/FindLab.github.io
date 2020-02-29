@@ -2,7 +2,7 @@
 author: k-l-lambda
 coauthor: k-l-lambda
 email: k-l-lambda@gmail.com
-title: A proposal for content based MIDI files indexing and retrieving on digital piano
+title: A proposal for content based MIDI files indexing and retrieving on piano
 mathjax: true
 tags:
 - music
@@ -66,7 +66,7 @@ which play a key role in the smart piano user interactive system, also a pending
 I hope there is another opportunity to talk details of the score following method. In this article we focus on the rough phase.
 
 
-## How does it work
+## How it works
 
 A score following program is an agent to guess where place in a specific music score, the user is playing at right now.
 As hint by the word *guess* (or *fuzzy*), the program will output a confidence value to tell how confident it believes its result.
@@ -109,11 +109,11 @@ As long as we didn't miss the potential goal score, we will do our best to enhan
 
 
 ---
-[^1]: paper: [MIDIZ: content based indexing and retrieving MIDI files](http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0104-65001999000300002)
+[^1]: Paper: [MIDIZ: content based indexing and retrieving MIDI files](http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0104-65001999000300002)
 [^2]: MIDIZ use 2<sup>k</sup>-1 dimensional vectors, usually set k=3.
 
 
 
 <script src="/vue/chunk-vendors.js"></script>
-<script src="/vue/midi-player.js">
-<link rel="stylesheet" type="text/css" href="/vue/css/chunk-vendors.css" />
+<script src="/vue/midi-player.js"></script>
+<script src="/vue/soundfont-loader.js"></script>
