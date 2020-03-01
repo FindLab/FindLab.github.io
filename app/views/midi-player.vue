@@ -71,22 +71,22 @@
 
 		methods: {
 			async onMidi (data, timestamp) {
-				const delay = (timestamp - performance.now()) * 1e-3;	// in seconds
-
 				if (!MidiAudio.WebAudio.empty()) {
 					switch (data.subtype) {
 					case "noteOn":
-						MidiAudio.noteOn(data.channel, data.noteNumber, data.velocity, delay);
+						MidiAudio.noteOn(data.channel, data.noteNumber, data.velocity, timestamp);
 
 						break;
 					case "noteOff":
-						MidiAudio.noteOff(data.channel, data.noteNumber, delay);
+						MidiAudio.noteOff(data.channel, data.noteNumber, timestamp);
 
 						break;
 					}
 				}
 
-				await msDelay(delay);
+				const delay = timestamp - performance.now();
+				if (delay > 0)
+					await msDelay(delay);
 
 				if (this.player && this.player.isPlaying)
 					this.$emit("midi", data);
