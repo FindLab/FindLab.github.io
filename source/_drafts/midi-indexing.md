@@ -107,6 +107,9 @@ As long as we didn't miss the potential goal score, we will enhance filter stren
 <div class="vue-component midi-pitches-mask" data-midi-url="/midi/Minuets_in_G_major.mid"></div>
 
 
+<div class="vue-component chart"></div>
+
+
 
 ---
 [^1]: Paper: [MIDIZ: content based indexing and retrieving MIDI files](http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0104-65001999000300002)
@@ -116,4 +119,5 @@ As long as we didn't miss the potential goal score, we will enhance filter stren
 
 <script src="/vue/chunk-vendors.js"></script>
 <script src="/vue/midi-pitches-mask.js"></script>
+<script src="/vue/chart.js"></script>
 <script src="/vue/soundfont-loader.js"></script>

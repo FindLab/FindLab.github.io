@@ -3,6 +3,7 @@
 		<MIDIPlayer :url="midiUrl"
 			@midi="onMidi"
 			@reset="onReset"
+			@play="onPlay"
 		/>
 		<div class="plots">
 			<VeHistogram class="stat playing"
@@ -86,6 +87,12 @@
 
 			onReset () {
 				this.playingStat.forEach(i => i.count = 0);
+			},
+
+
+			onPlay (progress) {
+				if (progress === 0)
+					this.playingStat.forEach(i => i.count = 0);
 			},
 		},
 	};

@@ -7,6 +7,7 @@ const entries = [
 	"midi-player",
 	"soundfont-loader",
 	"midi-pitches-mask",
+	"chart",
 ];
 
 

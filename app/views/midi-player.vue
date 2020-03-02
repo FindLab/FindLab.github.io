@@ -6,7 +6,7 @@
 		<div v-if="player" class="controls">
 			<div>
 				<button v-show="player.progressTime > 0" @click="onReset">&#x23ee;</button>
-				<button v-show="!player.isPlaying" @click="player.play()">&#x25b6;</button>
+				<button v-show="!player.isPlaying" @click="onPlay">&#x25b6;</button>
 				<button v-show="player.isPlaying" @click="player.pause()">&#x23f8;</button>
 			</div>
 		</div>
@@ -108,6 +108,13 @@
 
 					this.$emit("reset");
 				}
+			},
+
+
+			onPlay () {
+				this.$emit("play", this.player.progressTime);
+
+				this.player.play();
 			},
 		},
 	};
