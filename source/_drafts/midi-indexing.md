@@ -107,7 +107,7 @@ As long as we didn't miss the potential goal score, we will enhance filter stren
 <div class="vue-component midi-pitches-mask" data-midi-url="/midi/Minuets_in_G_major.mid"></div>
 
 
-<div class="vue-component chart"></div>
+<div class="vue-component chart" data-source="/charts/score-pitch-count-dist.json"></div>
 
 
 

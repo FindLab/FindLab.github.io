@@ -1,11 +1,10 @@
 <template>
-	<component :is="`Ve${type}`" :data="chartData" :settings="chartSettings" />
+	<component v-if="sourceData" :is="`Ve${type}`" :data="chartData" :settings="chartSettings" />
 </template>
 
 <script>
 	import _ from "lodash";
 	import * as vcharts from "v-charts";
-	//console.log("vcharts:", vcharts);
 
 
 
@@ -22,6 +21,7 @@
 				type: String,
 				default: "Histogram",
 			},
+			source: String,
 		},
 
 
@@ -30,23 +30,40 @@
 		},
 
 
+		data () {
+			return {
+				sourceData: null,
+			};
+		},
+
+
 		computed: {
 			chartData () {
-				return {
-					columns: ["date", "cost", "profit", "growthRate", "people"],
-					rows: [
-						{cost: 1523, date: "01/01", profit: 1523, growthRate: 0.12, people: 100},
-						{cost: 1223, date: "01/02", profit: 1523, growthRate: 0.345, people: 100},
-						{cost: 2123, date: "01/03", profit: 1523, growthRate: 0.7, people: 100},
-						{cost: 4123, date: "01/04", profit: 1523, growthRate: 0.31, people: 100},
-					],
-				};
+				return this.sourceData && this.sourceData.data;
 			},
 
 
 			chartSettings () {
-				return undefined;
+				return this.sourceData && this.sourceData.settings;
 			},
+		},
+
+
+		async created () {
+			const json = await (await fetch(this.source)).json();
+
+			if (json._preprocess) {
+				if (json._preprocess.singleField) {
+					const field = json._preprocess.singleField;
+
+					json.data = {
+						columns: ["index", field],
+						rows: json.data.map((value, index) => ({[field]: value, index})),
+					};
+				}
+			}
+
+			this.sourceData = json;
 		},
 	};
 </script>
