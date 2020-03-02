@@ -76,7 +76,7 @@
 		methods: {
 			onMidi (event) {
 				if (event.subtype === "noteOn") {
-					console.log("midi:", event.noteNumber);
+					//console.log("midi:", event.noteNumber);
 					const item = this.playingStat.find(i => i.pitch === event.noteNumber);
 					if (item)
 						++item.count;
