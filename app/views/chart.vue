@@ -1,9 +1,9 @@
 <template>
-	<component v-if="sourceData" :is="`Ve${type}`"
-		:data="this.sourceData.data"
-		:markLine="this.sourceData.markLine"
-		:settings="this.sourceData.settings"
-		:grid="this.sourceData.grid"
+	<component v-if="sourceData" :is="`Ve${sourceData && sourceData.type || type}`"
+		:data="sourceData.data"
+		:markLine="sourceData.markLine"
+		:settings="sourceData.settings"
+		:grid="sourceData.grid"
 	/>
 </template>
 
@@ -51,7 +51,7 @@
 
 					json.data = {
 						columns: ["index", field],
-						rows: json.data.map((value, index) => ({[field]: value, index})),
+						rows: json._preprocess.metaData.map((value, index) => ({[field]: value, index})),
 					};
 				}
 			}
