@@ -113,6 +113,9 @@ As long as we didn't miss the potential goal score, we will enhance filter stren
 <div class="vue-component chart" data-source="/charts/pitch-histogram-minuet-in-Gmajor.json"></div>
 
 
+<div class="vue-component chart" data-source="/charts/pitch-mask-minuet-in-Gmajor.json"></div>
+
+
 
 ---
 [^1]: Paper: [MIDIZ: content based indexing and retrieving MIDI files](http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0104-65001999000300002)
