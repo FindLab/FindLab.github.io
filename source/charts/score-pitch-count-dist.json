@@ -38,5 +38,9 @@
 	"grid": {
 		"left": 20,
 		"right": 20
+	},
+	"settings": {
+		"xAxisName": "bar index",
+		"yAxisName": ["count"]
 	}
 }
