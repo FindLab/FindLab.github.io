@@ -1,5 +1,10 @@
 <template>
-	<component v-if="sourceData" :is="`Ve${type}`" :data="chartData" :settings="chartSettings" />
+	<component v-if="sourceData" :is="`Ve${type}`"
+		:data="this.sourceData.data"
+		:markLine="this.sourceData.markLine"
+		:settings="this.sourceData.settings"
+		:grid="this.sourceData.grid"
+	/>
 </template>
 
 <script>
@@ -34,18 +39,6 @@
 			return {
 				sourceData: null,
 			};
-		},
-
-
-		computed: {
-			chartData () {
-				return this.sourceData && this.sourceData.data;
-			},
-
-
-			chartSettings () {
-				return this.sourceData && this.sourceData.settings;
-			},
 		},
 
 
