@@ -117,8 +117,8 @@ As long as we didn't miss the potential goal score, we will enhance filter stren
 
 
 <datalist id="midi-list">
-	<option value="/midi/Minuets_in_G_major.mid">
 	<option value="/midi/Turkish_Rondo.mid">
+	<option value="/midi/Minuets_in_G_major.mid">
 	<option value="/midi/Fur_Elise.mid">
 	<option value="/midi/Chopin_Nocturne_in_E_flat_major.mid">
 	<option value="/midi/Ballade_pour_Adeline.mid">

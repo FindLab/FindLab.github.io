@@ -47,7 +47,7 @@
 		}, Array(88).fill(0));
 
 
-	const PITCH_THRESHOLDS = [27, 14, 8, 4];
+	const PITCH_THRESHOLDS = [32, 16, 8, 4];
 	const coarsenPitchCount = count => {
 		for (const threshold of PITCH_THRESHOLDS) {
 			if (count >= threshold)
