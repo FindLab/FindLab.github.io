@@ -34,7 +34,7 @@
     "vue-property-decorator": "^8.3.0"
   },
   "devDependencies": {
-    "@k-l-lambda/web-widgets": "^0.2.6",
+    "@k-l-lambda/web-widgets": "^0.2.7",
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-plugin-eslint": "^4.1.0",
     "@vue/cli-service": "^4.1.0",

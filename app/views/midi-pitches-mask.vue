@@ -1,16 +1,18 @@
 <template>
 	<div>
-		<MIDIPlayer :url="midiUrl"
+		<p>
+			Choose an input song:
+			<select v-if="sourceUrls" v-model="chosenURL">
+				<option v-for="url of sourceUrls" :key="url" :value="url">{{normalizeMidiName(url)}}</option>
+			</select>
+		</p>
+		<MIDIPlayer v-if="chosenURL"
+			:url="chosenURL"
 			@midi="onMidi"
 			@reset="onReset"
 			@play="onPlay"
 		/>
 		<div class="plots">
-			<VeHistogram class="stat playing"
-				:data="playingData"
-				:settings="statSetting"
-				:legendVisible="false"
-			/>
 		</div>
 	</div>
 </template>
@@ -19,12 +21,6 @@
 	import {VeHistogram} from "v-charts";
 
 	import MIDIPlayer from "./midi-player.vue";
-
-
-
-	const NOTE_NAMES = [
-		"C", "#C", "D", "#D", "E", "F", "#F", "G", "#G", "A", "#A", "B",
-	];
 
 
 
@@ -39,42 +35,45 @@
 
 
 		props: {
-			midiUrl: String,
+			sourceList: String,
 		},
 
 
 		data () {
 			return {
+				chosenURL: null,
 				playingStat: Array(88).fill().map((_, i) => ({
 					pitch: i + 21,
 					count: 0,
-					name: `${NOTE_NAMES[(i + 21) % 12]}${Math.floor((i + 9) / 12)}`,
+					//name: `${NOTE_NAMES[(i + 21) % 12]}${Math.floor((i + 9) / 12)}`,
 				})),
 			};
 		},
 
 
 		computed: {
-			playingData () {
-				return {
-					columns: ["pitch", "count", "name"],
-					rows: this.playingStat,
-				};
-			},
+			sourceUrls () {
+				const list = document.querySelector(this.sourceList);
+				if (list)
+					return [...list.options].map(option => option.value);
 
-
-			statSetting () {
-				return {
-					metrics: ["count"],
-					dimension: ["name"],
-					xAxisName: "pitch",
-					yAxisName: ["count"],
-				};
+				return null;
 			},
 		},
 
 
+		mounted () {
+			if (this.sourceUrls)
+				this.chosenURL = this.sourceUrls[0];
+		},
+
+
 		methods: {
+			normalizeMidiName (path) {
+				return path.replace(/.*\/([^/]+)\.mid$/, "$1").replace(/_/g, " ");
+			},
+
+
 			onMidi (event) {
 				if (event.subtype === "noteOn") {
 					//console.log("midi:", event.noteNumber);

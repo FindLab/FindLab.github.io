@@ -52,24 +52,31 @@
 		},
 
 
-		async created () {
-			const buffer = await (await fetch(this.url)).arrayBuffer();
-			const midi = MIDI.parseMidiData(buffer);
-
-			this.player = new MidiPlayer(midi, {
-				onMidi: (data, timestamp) => this.onMidi(data, timestamp),
-				onPlayFinish: () => this.onFinish(),
-			});
+		created () {
+			this.loadPlayer();
 		},
 
 
 		mounted () {
 			this.width = this.$el.clientWidth;
 			window.addEventListener("resize", () => this.width = this.$el.clientWidth);
+
+			console.log("MidiAudio:", MidiAudio);
 		},
 
 
 		methods: {
+			async loadPlayer () {
+				const buffer = await (await fetch(this.url)).arrayBuffer();
+				const midi = MIDI.parseMidiData(buffer);
+
+				this.player = new MidiPlayer(midi, {
+					onMidi: (data, timestamp) => this.onMidi(data, timestamp),
+					onPlayFinish: () => this.onFinish(),
+				});
+			},
+
+
 			async onMidi (data, timestamp) {
 				if (!MidiAudio.WebAudio.empty()) {
 					switch (data.subtype) {
@@ -116,6 +123,11 @@
 
 				this.player.play();
 			},
+		},
+
+
+		watch: {
+			url: "loadPlayer",
 		},
 	};
 </script>
