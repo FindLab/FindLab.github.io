@@ -13,7 +13,7 @@
 			@play="onPlay"
 		/>
 		<div class="plots" v-if="pitchSeries">
-			<div v-for="(series, i) of pitchSeries" :key="i">
+			<div v-for="(series, i) of pitchSeries" :key="i" :class="{off: sieveOffs[i]}">
 				<VeHistogram
 					:series="series"
 					:width="plotCommon.width"
@@ -48,7 +48,7 @@
 
 
 	const PITCH_THRESHOLDS = [27, 14, 8, 4];
-	const roundPitchCount = count => {
+	const coarsenPitchCount = count => {
 		for (const threshold of PITCH_THRESHOLDS) {
 			if (count >= threshold)
 				return threshold;
@@ -78,8 +78,9 @@
 			return {
 				chosenURL: null,
 				playingColumns: Array(88).fill(0),
-				roundPlayingColumns: Array(88).fill(0),
+				coarsePitchCount: Array(88).fill(0),
 				pitchSeries: null,
+				sieveOffs: null,
 			};
 		},
 
@@ -120,10 +121,12 @@
 				this.chosenURL = this.sourceUrls[0];
 
 				const buffers = await Promise.all(this.sourceUrls.map(async (url) => await (await fetch(url)).arrayBuffer()));
-				const pitchColumns = buffers.map(MIDI.parseMidiData).map(countMidiPitches).map(columns => columns.map(roundPitchCount));
+				const pitchColumns = buffers.map(MIDI.parseMidiData).map(countMidiPitches).map(columns => columns.map(coarsenPitchCount));
 				this.pitchSeries = pitchColumns.map(column => this.columnToSeries(column));
 
-				//console.log("pitchSeries:", this.pitchSeries);
+				this.sieveOffs = Array(pitchColumns.length).fill(false);
+
+				this.pitchColumns = pitchColumns;
 			}
 		},
 
@@ -145,7 +148,7 @@
 					},
 					{
 						name: "playing coarse",
-						data: this.roundPlayingColumns,
+						data: this.coarsePitchCount,
 						type: "bar",
 						itemStyle: {color: "red"},
 					},
@@ -164,7 +167,10 @@
 					//++this.playingColumns[event.noteNumber - 21];
 					const i = event.noteNumber - 21;
 					Vue.set(this.playingColumns, i, this.playingColumns[i] + 1);
-					Vue.set(this.roundPlayingColumns, i, roundPitchCount(this.playingColumns[i]));
+					Vue.set(this.coarsePitchCount, i, coarsenPitchCount(this.playingColumns[i]));
+
+					this.sieveOffs.forEach((off, j) =>
+						Vue.set(this.sieveOffs, j, off || this.coarsePitchCount[i] > this.pitchColumns[j][i]));
 				}
 			},
 
@@ -172,8 +178,10 @@
 			onReset () {
 				for (let i = 0; i < this.playingColumns.length; ++i) {
 					this.playingColumns[i] = 0;
-					this.roundPlayingColumns[i] = 0;
+					this.coarsePitchCount[i] = 0;
 				}
+
+				this.sieveOffs.fill(false);
 			},
 
 
@@ -191,5 +199,15 @@
 		display: inline-block;
 		width: 50%;
 		text-align: center;
+	}
+
+	.plots label
+	{
+		color: #484;
+	}
+
+	.plots .off label
+	{
+		color: #d00;
 	}
 </style>
