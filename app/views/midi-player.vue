@@ -74,6 +74,9 @@
 			async loadPlayer () {
 				this.loading = true;
 
+				if (this.player)
+					this.player.dispose();
+
 				const buffer = await (await fetch(this.url)).arrayBuffer();
 				const midi = MIDI.parseMidiData(buffer);
 

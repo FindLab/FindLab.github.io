@@ -122,6 +122,7 @@ As long as we didn't miss the potential goal score, we will enhance filter stren
 	<option value="/midi/Minuets_in_G_major.mid">
 	<option value="/midi/Turkish_Rondo.mid">
 	<option value="/midi/Ballade_pour_Adeline.mid">
+	<option value="/midi/Wings_of_Silence.mid">
 </datalist>
 <div class="vue-component midi-pitches-mask" data-source-list="#midi-list"></div>
 

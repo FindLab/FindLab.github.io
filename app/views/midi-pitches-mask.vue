@@ -12,10 +12,10 @@
 			@reset="onReset"
 			@play="onPlay"
 		/>
-		<div class="plots" v-if="pitchColumns">
-			<div v-for="(column, i) of pitchColumns" :key="i">
+		<div class="plots" v-if="pitchSeries">
+			<div v-for="(series, i) of pitchSeries" :key="i">
 				<VeHistogram
-					:series="columnToSeries(column)"
+					:series="series"
 					:width="plotCommon.width"
 					:height="plotCommon.height"
 					:xAxis="plotCommon.xAxis"
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+	import Vue from "vue";
+
 	import {VeHistogram} from "v-charts";
 	import {MIDI} from "@k-l-lambda/web-widgets";
 
@@ -45,9 +47,9 @@
 		}, Array(88).fill(0));
 
 
-	const PITCH_THRESHOLDS = [4, 8, 14, 27];
+	const PITCH_THRESHOLDS = [27, 14, 8, 4];
 	const roundPitchCount = count => {
-		for (const threshold of PITCH_THRESHOLDS.reverse()) {
+		for (const threshold of PITCH_THRESHOLDS) {
 			if (count >= threshold)
 				return threshold;
 		}
@@ -75,11 +77,9 @@
 		data () {
 			return {
 				chosenURL: null,
-				playingStat: Array(88).fill().map((_, i) => ({
-					pitch: i + 21,
-					count: 0,
-				})),
-				pitchColumns: null,
+				playingColumns: Array(88).fill(0),
+				roundPlayingColumns: Array(88).fill(0),
+				pitchSeries: null,
 			};
 		},
 
@@ -120,7 +120,10 @@
 				this.chosenURL = this.sourceUrls[0];
 
 				const buffers = await Promise.all(this.sourceUrls.map(async (url) => await (await fetch(url)).arrayBuffer()));
-				this.pitchColumns = buffers.map(MIDI.parseMidiData).map(countMidiPitches).map(columns => columns.map(roundPitchCount));
+				const pitchColumns = buffers.map(MIDI.parseMidiData).map(countMidiPitches).map(columns => columns.map(roundPitchCount));
+				this.pitchSeries = pitchColumns.map(column => this.columnToSeries(column));
+
+				//console.log("pitchSeries:", this.pitchSeries);
 			}
 		},
 
@@ -132,32 +135,51 @@
 
 
 			columnToSeries (column) {
-				return {
-					name: "count",
-					data: column,
-					type: "bar",
-				};
+				return [
+					{
+						name: "playing",
+						data: this.playingColumns,
+						type: "bar",
+						barGap: -1,
+						barCategoryGap: 0,
+					},
+					{
+						name: "playing coarse",
+						data: this.roundPlayingColumns,
+						type: "bar",
+						itemStyle: {color: "red"},
+					},
+					{
+						name: "candidate",
+						data: column,
+						type: "bar",
+					},
+				];
 			},
 
 
 			onMidi (event) {
 				if (event.subtype === "noteOn") {
 					//console.log("midi:", event.noteNumber);
-					const item = this.playingStat.find(i => i.pitch === event.noteNumber);
-					if (item)
-						++item.count;
+					//++this.playingColumns[event.noteNumber - 21];
+					const i = event.noteNumber - 21;
+					Vue.set(this.playingColumns, i, this.playingColumns[i] + 1);
+					Vue.set(this.roundPlayingColumns, i, roundPitchCount(this.playingColumns[i]));
 				}
 			},
 
 
 			onReset () {
-				this.playingStat.forEach(i => i.count = 0);
+				for (let i = 0; i < this.playingColumns.length; ++i) {
+					this.playingColumns[i] = 0;
+					this.roundPlayingColumns[i] = 0;
+				}
 			},
 
 
 			onPlay (progress) {
 				if (progress === 0)
-					this.playingStat.forEach(i => i.count = 0);
+					this.onReset();
 			},
 		},
 	};
