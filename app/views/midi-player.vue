@@ -10,11 +10,14 @@
 				<button v-show="player.isPlaying" @click="player.pause()">&#x23f8;</button>
 			</div>
 		</div>
+		<Loading v-show="loading" />
 	</div>
 </template>
 
 <script>
 	import {MidiRoll, MIDI, MidiPlayer, MidiAudio} from "@k-l-lambda/web-widgets";
+
+	import Loading from "./loading.vue";
 
 
 
@@ -41,6 +44,7 @@
 
 		components: {
 			MidiRoll,
+			Loading,
 		},
 
 
@@ -48,6 +52,7 @@
 			return {
 				player: null,
 				width: 600,
+				loading: false,
 			};
 		},
 
@@ -61,12 +66,14 @@
 			this.width = this.$el.clientWidth;
 			window.addEventListener("resize", () => this.width = this.$el.clientWidth);
 
-			console.log("MidiAudio:", MidiAudio);
+			//console.log("MidiAudio:", MidiAudio);
 		},
 
 
 		methods: {
 			async loadPlayer () {
+				this.loading = true;
+
 				const buffer = await (await fetch(this.url)).arrayBuffer();
 				const midi = MIDI.parseMidiData(buffer);
 
@@ -74,6 +81,8 @@
 					onMidi: (data, timestamp) => this.onMidi(data, timestamp),
 					onPlayFinish: () => this.onFinish(),
 				});
+
+				this.loading = false;
 			},
 
 
