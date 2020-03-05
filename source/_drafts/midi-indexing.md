@@ -61,7 +61,7 @@ Though a deviated note can be tolerant by this scheme, but omit/extra ones are n
 Because note count change will break fragment splitting, especially when interval between 2 errors is less than fragment length 2<sup>k</sup>.
 
 We propose a new approach to deal with MIDI retrieving with input interface of piano playing, which partitions this task into 2 phases:
-pitch histogram indexing (rough phase) and music fuzzy matching (fine phase). The fine phase is also a robust score following algorithm,
+pitch frequency indexing (rough phase) and music fuzzy matching (fine phase). The fine phase is also a robust score following algorithm,
 which play a key role in the smart piano user interactive system, also a pending patent.
 I hope there is another opportunity to talk details of the score following method. In this article we focus on the rough phase.
 
@@ -102,12 +102,12 @@ $$ \textrm{filter stregth} := 1 - \frac{\textrm{left candidate count}}{\textrm{t
 As long as we didn't miss the potential goal score, we will enhance filter strength as well as we can.
 
 
-## Pitch histogram indexing
+## Pitch frequency indexing
 
 <div class="vue-component midi-pitches-counter" data-midi-url="/midi/Minuets_in_G_major.mid"></div>
 
 
-<div class="vue-component chart" data-type="Line" data-source="/charts/score-pitch-count-dist.json"></div>
+<div class="vue-component chart" data-type="Line" data-source="/charts/score-pitch-frequency-dist.json"></div>
 
 
 <div class="vue-component chart" data-source="/charts/pitch-histogram-minuet-in-Gmajor.json"></div>
