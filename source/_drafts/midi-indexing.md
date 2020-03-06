@@ -127,8 +127,7 @@ As long as we didn't miss the potential goal score, we will enhance filter stren
 <div class="vue-component midi-pitches-mask" data-source-list="#midi-list"></div>
 
 
-<div class="vue-component chart" data-source="/charts/head-pitch-mask-set.json"></div>
-
+## Head pitch mask indexing
 
 *Butterfly Lovers (梁祝)*
 <div class="vue-component midi-head-mask" data-time-scale="0.018">
@@ -152,6 +151,9 @@ As long as we didn't miss the potential goal score, we will enhance filter stren
 		"notes": [{"start":91.66666666666652,"duration":374.99999999999955,"velocity":41,"pitch":76},{"start":419.79166666666606,"duration":329.16666666666697,"velocity":68,"pitch":75},{"start":698.958333333333,"duration":301.04166666666606,"velocity":55,"pitch":76},{"start":941.6666666666661,"duration":309.375,"velocity":51,"pitch":75},{"start":1197.916666666666,"duration":292.70833333333394,"velocity":52,"pitch":76},{"start":1439.583333333333,"duration":293.75,"velocity":48,"pitch":71},{"start":1668.75,"duration":317.70833333333303,"velocity":59,"pitch":74},{"start":1904.166666666666,"duration":273.95833333333394,"velocity":48,"pitch":72},{"start":2150,"duration":239.58333333333303,"velocity":56,"pitch":69},{"start":2184.375,"duration":835.4166666666661,"velocity":34,"pitch":45},{"start":2408.333333333333,"duration":565.625,"velocity":45,"pitch":52},{"start":2642.708333333333,"duration":139.58333333333303,"velocity":45,"pitch":57},{"start":2888.541666666666,"duration":286.45833333333303,"velocity":57,"pitch":60},{"start":3115.624999999999,"duration":403.125,"velocity":65,"pitch":64},{"start":3356.249999999999,"duration":285.41666666666606,"velocity":65,"pitch":69},{"start":3578.124999999999,"duration":754.166666666667,"velocity":62,"pitch":71},{"start":3602.083333333332,"duration":197.91666666666697,"velocity":41,"pitch":40},{"start":3843.749999999999,"duration":201.04166666666697,"velocity":44,"pitch":52},{"start":4061.458333333333,"duration":59.375,"velocity":60,"pitch":56},{"start":4290.625,"duration":362.5,"velocity":48,"pitch":64}]
 	}
 </div>
+
+
+<div class="vue-component chart" data-source="/charts/head-pitch-mask-set.json"></div>
 
 
 
