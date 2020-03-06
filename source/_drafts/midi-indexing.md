@@ -130,9 +130,26 @@ As long as we didn't miss the potential goal score, we will enhance filter stren
 <div class="vue-component chart" data-source="/charts/head-pitch-mask-set.json"></div>
 
 
+*Butterfly Lovers (梁祝)*
+<div class="vue-component midi-head-mask" data-time-scale="0.018">
+	{
+		"notes": [{"start":90,"duration":680,"velocity":56,"pitch":74},{"start":632.5,"duration":610,"velocity":63,"pitch":71},{"start":1145,"duration":587.5,"velocity":73,"pitch":69},{"start":1742.5,"duration":585,"velocity":38,"pitch":55},{"start":1752.5,"duration":2230,"velocity":53,"pitch":67},{"start":2370,"duration":577.5,"velocity":45,"pitch":62},{"start":2850,"duration":552.5,"velocity":68,"pitch":59},{"start":3305,"duration":615,"velocity":64,"pitch":57},{"start":3907.5,"duration":2385,"velocity":47,"pitch":55},{"start":4522.5,"duration":657.5,"velocity":76,"pitch":69},{"start":5022.5,"duration":632.5,"velocity":84,"pitch":66},{"start":5530,"duration":550,"velocity":81,"pitch":64},{"start":6080,"duration":2265,"velocity":50,"pitch":62},{"start":6597.5,"duration":655,"velocity":59,"pitch":57},{"start":7157.5,"duration":567.5,"velocity":61,"pitch":54},{"start":7672.5,"duration":557.5,"velocity":51,"pitch":52},{"start":8242.5,"duration":1367.5,"velocity":43,"pitch":50},{"start":8955,"duration":537.5,"velocity":69,"pitch":78},{"start":9450,"duration":502.5,"velocity":89,"pitch":76},{"start":9952.5,"duration":562.5,"velocity":95,"pitch":78}]
+	}
+</div>
+
+
+*Étude Op. 10, No. 3 (Chopin)*
 <div class="vue-component midi-head-mask" data-time-scale="0.03">
 	{
 		"notes": [{"start":93.75,"duration":243.75,"velocity":41,"pitch":59},{"start":984.375,"duration":1338.541666666666,"velocity":49,"pitch":64},{"start":1015.625,"duration":1635.416666666666,"velocity":25,"pitch":40},{"start":1027.083333333333,"duration":692.708333333333,"velocity":32,"pitch":56},{"start":1667.708333333333,"duration":697.9166666666661,"velocity":34,"pitch":59},{"start":1677.083333333333,"duration":741.6666666666661,"velocity":24,"pitch":47},{"start":2183.333333333333,"duration":659.375,"velocity":53,"pitch":63},{"start":2183.333333333333,"duration":702.083333333333,"velocity":34,"pitch":56},{"start":2704.166666666666,"duration":648.9583333333321,"velocity":51,"pitch":64},{"start":2704.166666666666,"duration":765.6249999999991,"velocity":36,"pitch":59},{"start":2704.166666666666,"duration":797.9166666666661,"velocity":23,"pitch":47},{"start":3258.333333333332,"duration":644.791666666667,"velocity":29,"pitch":57},{"start":3268.749999999999,"duration":2665.624999999999,"velocity":51,"pitch":66},{"start":3280.208333333332,"duration":2803.125,"velocity":36,"pitch":63},{"start":3301.041666666665,"duration":1448.958333333333,"velocity":28,"pitch":35},{"start":3852.083333333332,"duration":396.875,"velocity":30,"pitch":59},{"start":3862.499999999999,"duration":471.8749999999991,"velocity":24,"pitch":47},{"start":4344.791666666664,"duration":596.875,"velocity":28,"pitch":57},{"start":4857.291666666664,"duration":705.2083333333339,"velocity":28,"pitch":59},{"start":4867.70833333333,"duration":422.9166666666679,"velocity":26,"pitch":47}]
+	}
+</div>
+
+
+*Fur Elise*
+<div class="vue-component midi-head-mask" data-time-scale="0.04">
+	{
+		"notes": [{"start":91.66666666666652,"duration":374.99999999999955,"velocity":41,"pitch":76},{"start":419.79166666666606,"duration":329.16666666666697,"velocity":68,"pitch":75},{"start":698.958333333333,"duration":301.04166666666606,"velocity":55,"pitch":76},{"start":941.6666666666661,"duration":309.375,"velocity":51,"pitch":75},{"start":1197.916666666666,"duration":292.70833333333394,"velocity":52,"pitch":76},{"start":1439.583333333333,"duration":293.75,"velocity":48,"pitch":71},{"start":1668.75,"duration":317.70833333333303,"velocity":59,"pitch":74},{"start":1904.166666666666,"duration":273.95833333333394,"velocity":48,"pitch":72},{"start":2150,"duration":239.58333333333303,"velocity":56,"pitch":69},{"start":2184.375,"duration":835.4166666666661,"velocity":34,"pitch":45},{"start":2408.333333333333,"duration":565.625,"velocity":45,"pitch":52},{"start":2642.708333333333,"duration":139.58333333333303,"velocity":45,"pitch":57},{"start":2888.541666666666,"duration":286.45833333333303,"velocity":57,"pitch":60},{"start":3115.624999999999,"duration":403.125,"velocity":65,"pitch":64},{"start":3356.249999999999,"duration":285.41666666666606,"velocity":65,"pitch":69},{"start":3578.124999999999,"duration":754.166666666667,"velocity":62,"pitch":71},{"start":3602.083333333332,"duration":197.91666666666697,"velocity":41,"pitch":40},{"start":3843.749999999999,"duration":201.04166666666697,"velocity":44,"pitch":52},{"start":4061.458333333333,"duration":59.375,"velocity":60,"pitch":56},{"start":4290.625,"duration":362.5,"velocity":48,"pitch":64}]
 	}
 </div>
 
