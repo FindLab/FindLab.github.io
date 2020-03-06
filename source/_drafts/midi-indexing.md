@@ -130,6 +130,13 @@ As long as we didn't miss the potential goal score, we will enhance filter stren
 <div class="vue-component chart" data-source="/charts/head-pitch-mask-set.json"></div>
 
 
+<div class="vue-component midi-head-mask" data-time-scale="0.036">
+	{
+		"notes": [{"start":93.75,"duration":243.75,"velocity":41,"pitch":59},{"start":984.375,"duration":1338.541666666666,"velocity":49,"pitch":64},{"start":1015.625,"duration":1635.416666666666,"velocity":25,"pitch":40},{"start":1027.083333333333,"duration":692.708333333333,"velocity":32,"pitch":56},{"start":1667.708333333333,"duration":697.9166666666661,"velocity":34,"pitch":59},{"start":1677.083333333333,"duration":741.6666666666661,"velocity":24,"pitch":47},{"start":2183.333333333333,"duration":659.375,"velocity":53,"pitch":63},{"start":2183.333333333333,"duration":702.083333333333,"velocity":34,"pitch":56},{"start":2704.166666666666,"duration":648.9583333333321,"velocity":51,"pitch":64},{"start":2704.166666666666,"duration":765.6249999999991,"velocity":36,"pitch":59},{"start":2704.166666666666,"duration":797.9166666666661,"velocity":23,"pitch":47},{"start":3258.333333333332,"duration":644.791666666667,"velocity":29,"pitch":57},{"start":3268.749999999999,"duration":2665.624999999999,"velocity":51,"pitch":66},{"start":3280.208333333332,"duration":2803.125,"velocity":36,"pitch":63},{"start":3301.041666666665,"duration":1448.958333333333,"velocity":28,"pitch":35},{"start":3852.083333333332,"duration":396.875,"velocity":30,"pitch":59},{"start":3862.499999999999,"duration":471.8749999999991,"velocity":24,"pitch":47},{"start":4344.791666666664,"duration":596.875,"velocity":28,"pitch":57},{"start":4857.291666666664,"duration":705.2083333333339,"velocity":28,"pitch":59},{"start":4867.70833333333,"duration":422.9166666666679,"velocity":26,"pitch":47}]
+	}
+</div>
+
+
 
 ---
 [^1]: Paper: [MIDIZ: content based indexing and retrieving MIDI files](http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0104-65001999000300002)
@@ -141,4 +148,5 @@ As long as we didn't miss the potential goal score, we will enhance filter stren
 <script src="/vue/midi-pitches-counter.js"></script>
 <script src="/vue/midi-pitches-mask.js"></script>
 <script src="/vue/chart.js"></script>
+<script src="/vue/midi-head-mask.js"></script>
 <script src="/vue/soundfont-loader.js"></script>
