@@ -88,27 +88,47 @@ However, the time information utilizing is an open problem to exploit in future.
 
 Inevitably, pitch is the last option.
 To fast index scores, we convert the pitch characteristic of a whole candidate score (or user playing) notes into serval integer numbers.
-The filter operation, pass or fail judgement is done by binary number calculation, which is fast and constant with single score length
-(O(n) with candidate score count, but can be optimized by concurrency).
+The filter operation, pass or failure judgement is done by binary number calculation, which is fast and constant to single score length
+($O(n)$ to candidate scores count, but can be optimized by concurrency).
 
-The pitch characteristic is accumulatable with notes, and a music piece with more notes has stronger characteristic,
+The pitch characteristic is accumulatable to notes, and a music piece with more notes has stronger characteristic,
 i.e. as user keep playing, more and more candidate scores will be sieved off.
-Once candidate score count is lower than affordable line, we will run the fine phase.
+Once candidate scores count is lower than an affordable threshold, we will run the fine phase.
 
 We define an efficiency benchmark:
 
 $$ \textrm{filter stregth} := 1 - \frac{\textrm{left candidate count}}{\textrm{total candidate count}} $$
 
-As long as we didn't miss the potential goal score, we will enhance filter strength as well as we can.
+As long as we didn't miss the potential goal score, we will do our best to enhance filter strength.
 
 
 ## Pitch frequency indexing
 
+For a particular MIDI file, the attendance frequency of every pitches can be used as a unique signature.
+Try to play this MIDI file, and the histogram below will illustrate what is *pitch frequency* we talk about.
+
 <div class="vue-component midi-pitches-counter" data-midi-url="/midi/Minuets_in_G_major.mid"></div>
 
+When someone is playing a song A, we use $\textbf{A}$ to denote the notes set of song A,
+and $\textbf{B}$ to denote the notes set which the user has played by now.
+Supposing the user's playing has no errors, we have $\textbf{B} \subseteq \textbf{A}$.
+And for another different song C, we have some change that $\textbf{B} \nsubseteq \textbf{C}$,
+or $\textbf{B} \cap \overline{\textbf{C}} \neq \phi$.
+And as playing goes on, the chance of B over C keeps increasing.
+
+We can just compare every pitch frequency one by one to perform the checking, but dozens integer comparing per song is a heavy cost for large library.
+We optimize this by coarsen pitch frequency histogram to several bit masks.
+Piano has 88 keys, rather than store 88 numbers vertically, we can also store them horizontally,
+i.e. use a 88 bits binary number, whose every bit represents one pitch's attendance/absence.
+Furthermore, we set N thresholds (for example: N=4), and use N bit masks to store if every pitch frequency number is over the corresponding threshold.
+
+To choose these thresholds reasonably, we plot the pitch frequency distribution graph for a typical music set,
+which contains hundreds popular classical and modern songs.
 
 <div class="vue-component chart" data-type="Line" data-source="/charts/score-pitch-frequency-dist.json"></div>
 
+To tolerate sporadic error notes, we set the lowest threshold to 4. And for columns above 4, we divide pitch columns to four sections equally.
+Then the values on every boundary are our thresholds. Coincidentally, they are exact powers of 2.
 
 <div class="vue-component chart" data-source="/charts/pitch-histogram-minuet-in-Gmajor.json"></div>
 
