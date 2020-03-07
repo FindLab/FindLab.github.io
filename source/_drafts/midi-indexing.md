@@ -193,9 +193,9 @@ Here is a live demo to illustrate how this work:
 	</datalist>
 	<div class="vue-component midi-pitches-mask" data-source-list="#midi-list"></div>
 	<figcaption style="text-align: left">
-		<span style="color: #3ea6ef">&#x275a;</span> coarsen pitch histogram of candidate MIDI<br/>
+		<span style="color: #3ea6ef">&#x275a;</span> coarse pitch histogram of candidate MIDI<br/>
 		<span style="color: #00e5b0">&#x275a;</span> pitch histogram of query MIDI<br/>
-		<span style="color: red">&#x275a;</span> coarsen pitch histogram of query MIDI<br/>
+		<span style="color: red">&#x275a;</span> coarse pitch histogram of query MIDI<br/>
 	</figcaption>
 </figure>
 
