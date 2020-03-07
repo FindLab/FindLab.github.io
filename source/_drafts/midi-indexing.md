@@ -109,18 +109,18 @@ Try to play this MIDI file, and the histogram below will illustrate what is *pit
 
 <div class="vue-component midi-pitches-counter" data-midi-url="/midi/Minuets_in_G_major.mid"></div>
 
-When someone is playing a song A, we use $\textbf{A}$ to denote the notes set of song A,
+When someone is playing a song A, let's use $\textbf{A}$ to denote the notes set of song A,
 and $\textbf{B}$ to denote the notes set which the user has played by now.
 Supposing the user's playing has no errors, we have $\textbf{B} \subseteq \textbf{A}$.
-And for another different song C, we have some change that $\textbf{B} \nsubseteq \textbf{C}$,
+And for another different song C, we have some chance that $\textbf{B} \nsubseteq \textbf{C}$,
 or $\textbf{B} \cap \overline{\textbf{C}} \neq \phi$.
-And as playing goes on, the chance of B over C keeps increasing.
+As playing goes on, the probability of B over C keeps increasing.
 
 We can just compare every pitch frequency one by one to perform the checking, but dozens integer comparing per song is a heavy cost for large library.
 We optimize this by coarsen pitch frequency histogram to several bit masks.
 Piano has 88 keys, rather than store 88 numbers vertically, we can also store them horizontally,
-i.e. use a 88 bits binary number, whose every bit represents one pitch's attendance/absence.
-Furthermore, we set N thresholds (for example: N=4), and use N bit masks to store if every pitch frequency number is over the corresponding threshold.
+i.e. by a 88 bits binary number, whose each bit represents one pitch's attendance/absence.
+Furthermore, we set **T** thresholds (for example: T=4), and use T bit masks to store if each pitch frequency number is over the corresponding threshold.
 
 To choose these thresholds reasonably, we plot the pitch frequency distribution graph for a typical music set,
 which contains hundreds popular classical and modern songs.
@@ -130,11 +130,35 @@ which contains hundreds popular classical and modern songs.
 To tolerate sporadic error notes, we set the lowest threshold to 4. And for columns above 4, we divide pitch columns to four sections equally.
 Then the values on every boundary are our thresholds. Coincidentally, they are exact powers of 2.
 
+Here is an example, the entire MIDI's pitch frequency histogram of _Minuet in G Major_ is:
+
 <div class="vue-component chart" data-source="/charts/pitch-histogram-minuet-in-Gmajor.json"></div>
 
+And the coarsen result is:
 
 <div class="vue-component chart" data-source="/charts/pitch-mask-minuet-in-Gmajor.json"></div>
 
+All frequency columns are coarsen to four ranks according to thresholds of 4, 8, 16, 32.
+And we get four bit masks:
+
+```
+  0b0000000000000000000000100000010101101011010101101011110101101010000000000000000000000000
+  0b0000000000000000000000000000010001101011010001101011110101100000000000000000000000000000
+  0b0000000000000000000000000000000000101011010000101011010100000000000000000000000000000000
+  0b0000000000000000000000000000000000000000000000101011010000000000000000000000000000000000
+```
+
+Then we simply define the check function like this:
+
+```javascript
+maskCheck = (sample, song) => (sample & ~song) == 0;
+
+songCheck = (sampleMasks, songMasks) =>
+	   maskCheck(sampleMasks[0], songMasks[0])
+	&& maskCheck(sampleMasks[1], songMasks[1])
+	&& maskCheck(sampleMasks[2], songMasks[2])
+	&& maskCheck(sampleMasks[3], songMasks[3]);
+```
 
 <datalist id="midi-list">
 	<option value="/midi/Turkish_Rondo.mid">
