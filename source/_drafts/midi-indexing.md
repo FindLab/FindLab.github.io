@@ -10,7 +10,11 @@ tags:
 ---
 
 <figure>
-	{% img figure /images/gfind-crystal.webp 400 '"" "smart piano"' %}
+	<picture>
+		<source srcset="/images/gfind-crystal.webp" type="image/webp" />
+		<source srcset="/images/gfind-crystal.png" type="image/png" />
+		{% img figure /images/gfind-crystal.png 400 '"" "smart piano"' %}
+	</picture>
 	<figcaption>A smart piano.</figcaption>
 </figure>
 
@@ -160,15 +164,33 @@ songCheck = (sampleMasks, songMasks) =>
 	&& maskCheck(sampleMasks[3], songMasks[3]);
 ```
 
-<datalist id="midi-list">
-	<option value="/midi/Turkish_Rondo.mid">
-	<option value="/midi/Minuets_in_G_major.mid">
-	<option value="/midi/Fur_Elise.mid">
-	<option value="/midi/Chopin_Nocturne_in_E_flat_major.mid">
-	<option value="/midi/Ballade_pour_Adeline.mid">
-	<option value="/midi/Wings_of_Silence.mid">
-</datalist>
-<div class="vue-component midi-pitches-mask" data-source-list="#midi-list"></div>
+So we store pitch frequency masks for every songs in DB, and we compute masks for user played notes in real time.
+Then we can do high performence music indexing.
+
+Technically, we can encode these masks into 11 32-bits integers (88&times;4=32&times;11),
+ordered by from center to both sides (because center area has more 1s then margins).
+To reduce calculation, we exclude pure zero in query mask numbers before comparing, because zero mask won't sieve off any songs.
+And we can perform multiple passes for each query number, every pass is only performed on the rest songs after prior sifts.
+However, the algorithm details are denpend on hardware implementation and low-level APIs.
+
+Here is a live demo to illustrate how this work:
+
+<figure>
+	<datalist id="midi-list">
+		<option value="/midi/Turkish_Rondo.mid">
+		<option value="/midi/Minuets_in_G_major.mid">
+		<option value="/midi/Fur_Elise.mid">
+		<option value="/midi/Chopin_Nocturne_in_E_flat_major.mid">
+		<option value="/midi/Ballade_pour_Adeline.mid">
+		<option value="/midi/Wings_of_Silence.mid">
+	</datalist>
+	<div class="vue-component midi-pitches-mask" data-source-list="#midi-list"></div>
+	<figcaption style="text-align: left">
+		<span style="color: #3ea6ef">&#x275a;</span> coarsen pitch histogram of candidate MIDI<br/>
+		<span style="color: #00e5b0">&#x275a;</span> pitch histogram of query MIDI<br/>
+		<span style="color: red">&#x275a;</span> coarsen pitch histogram of query MIDI<br/>
+	</figcaption>
+</figure>
 
 
 ## Head pitch mask indexing
