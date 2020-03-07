@@ -36,7 +36,8 @@
 		]
 	},
 	"grid": {
-		"right": 20
+		"right": 20,
+		"bottom": 20
 	},
 	"settings": {
 		"xAxisName": "bar index",

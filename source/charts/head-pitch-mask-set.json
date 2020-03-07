@@ -16,7 +16,8 @@
 		"type": "value"
 	},
 	"grid": {
-		"right": 40
+		"right": 40,
+		"bottom": 20
 	},
 	"markLine": {
 		"data": [

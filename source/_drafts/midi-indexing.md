@@ -25,7 +25,7 @@ Once, you wanna play some muic opus on a whim, and it's so bothering to retrieve
 that you just play by memory directly.
 But the piano is so smart, just a few seconds later, it understands what you are playing, and displays the staff automatically.
 
-Another case. You see a nice piano when hanging out downtown, and you are just in a mood to play a music and show your talent to passers.
+Another case. You see a nice piano when hanging out downtown, and you are just in a mood to play a piece of music and show off your talent to passers.
 When you sit and play, surprisingly, the piano displays out the music information for what you are playing.
 And when you finish, it says, well done! Your performence beat 95% players on this opus.
 
@@ -49,7 +49,7 @@ Because wavelet transformed vectors only extract relative pitch information.
 * Pitch error tolerant. Euclidean distance magnitude of feature vectors reflect the similarity of melody fragments.
 If query melody have slight off-pitch from correct source melody, distance loss will keep tiny.
 
-However, on our particular purpose of piano playing, there are some issues in this scheme:
+However, for our particular purpose of piano playing, there are some issues in this scheme:
 
 * Wavelet transform is performing on a single melody line, while a piano music opus usually has rich harmony texture,
 and splitting melody voice from the whole music texture is troublesome:
@@ -120,30 +120,37 @@ And for another different song C, we have some chance that $\textbf{B} \nsubsete
 or $\textbf{B} \cap \overline{\textbf{C}} \neq \phi$.
 As playing goes on, the probability of B over C keeps increasing.
 
-We can just compare every pitch frequency one by one to perform the checking, but dozens integer comparing per song is a heavy cost for large library.
-We optimize this by coarsen pitch frequency histogram to several bit masks.
-Piano has 88 keys, rather than store 88 numbers vertically, we can also store them horizontally,
+We can just compare every pitch frequency one by one to perform the checking,
+but dozens integer comparing per song has heavy costs for a large library.
+We optimize this by coarsen pitch frequency histogram to several bit mask codes.
+Piano has 88 keys, rather than to store 88 numbers vertically, we can also store the information horizontally,
 i.e. by a 88 bits binary number, whose each bit represents one pitch's attendance/absence.
-Furthermore, we set **T** thresholds (for example: T=4), and use T bit masks to store if each pitch frequency number is over the corresponding threshold.
+Furthermore, we set **T** thresholds (for example: T=4),
+and use T bit mask codes to store whether each pitch frequency number is over the corresponding threshold.
 
 To choose these thresholds reasonably, we plot the pitch frequency distribution graph for a typical music set,
 which contains hundreds popular classical and modern songs.
 
-<div class="vue-component chart" data-type="Line" data-source="/charts/score-pitch-frequency-dist.json"></div>
+<figure>
+	<div class="vue-component chart" data-type="Line" data-source="/charts/score-pitch-frequency-dist.json"></div>
+	<figcaption>
+		Concat all pitch frequency columns of 243 popular songs togather, and sort them by value.
+	</figcaption>
+</figure>
 
 To tolerate sporadic error notes, we set the lowest threshold to 4. And for columns above 4, we divide pitch columns to four sections equally.
-Then the values on every boundary are our thresholds. Coincidentally, they are exact powers of 2.
+Then the values on every boundary are our thresholds. Coincidentally, they are exactly on powers of 2.
 
-Here is an example, the entire MIDI's pitch frequency histogram of _Minuet in G Major_ is:
+Here is an example, the entire MIDI's pitch frequency histogram of _Minuet in G Major_:
 
 <div class="vue-component chart" data-source="/charts/pitch-histogram-minuet-in-Gmajor.json"></div>
 
-And the coarsen result is:
+And the coarsen result:
 
 <div class="vue-component chart" data-source="/charts/pitch-mask-minuet-in-Gmajor.json"></div>
 
 All frequency columns are coarsen to four ranks according to thresholds of 4, 8, 16, 32.
-And we get four bit masks:
+Finnally we get four bit masks (converting black blocks to 1, white blocks to 0):
 
 ```
   0b0000000000000000000000100000010101101011010101101011110101101010000000000000000000000000
@@ -152,26 +159,26 @@ And we get four bit masks:
   0b0000000000000000000000000000000000000000000000101011010000000000000000000000000000000000
 ```
 
-Then we simply define the check function like this:
+Then we can simply define the check function like this:
 
 ```javascript
-maskCheck = (sample, song) => (sample & ~song) == 0;
+maskCheck = (query, song) => (query & ~song) == 0;
 
-songCheck = (sampleMasks, songMasks) =>
-	   maskCheck(sampleMasks[0], songMasks[0])
-	&& maskCheck(sampleMasks[1], songMasks[1])
-	&& maskCheck(sampleMasks[2], songMasks[2])
-	&& maskCheck(sampleMasks[3], songMasks[3]);
+songCheck = (queryMasks, songMasks) =>
+	   maskCheck(queryMasks[0], songMasks[0])
+	&& maskCheck(queryMasks[1], songMasks[1])
+	&& maskCheck(queryMasks[2], songMasks[2])
+	&& maskCheck(queryMasks[3], songMasks[3]);
 ```
 
 So we store pitch frequency masks for every songs in DB, and we compute masks for user played notes in real time.
-Then we can do high performence music indexing.
+Then we can do a high performence music indexing.
 
-Technically, we can encode these masks into 11 32-bits integers (88&times;4=32&times;11),
+Technically, we can encode these mask codes into 11 32-bits integers (88&times;4=32&times;11),
 ordered by from center to both sides (because center area has more 1s then margins).
-To reduce calculation, we exclude pure zero in query mask numbers before comparing, because zero mask won't sieve off any songs.
-And we can perform multiple passes for each query number, every pass is only performed on the rest songs after prior sifts.
-However, the algorithm details are denpend on hardware implementation and low-level APIs.
+To reduce calculation, we exclude pure zeros in query mask codes before comparing, because zero mask won't sieve off any songs.
+And we can perform multiple passes for each query code, every pass is only performed on the rest songs after prior sifts.
+However, all above are suggestions, the algorithm details should depend on your hardware implementation and low-level APIs.
 
 Here is a live demo to illustrate how this work:
 
@@ -192,26 +199,50 @@ Here is a live demo to illustrate how this work:
 	</figcaption>
 </figure>
 
+You may notice that some song takes quite a long time to exclude all other songs.
+Firstly, our purpose for this phase is not exclude all other songs, but shrink the possible range into an affordable size.
+Secondly, we have another supplementary trick in next chapter.
 
 ## Head pitch mask indexing
 
-*Butterfly Lovers (梁祝)*
+In most cases, people play a piece of music from beginning rather than from somewhere middle.
+Pitches combination to the head a few notes is also a characteristic signature.
+So we can use the head pitch mask indexing as an alternative music sift method,
+if this failed, i.e. too many songs left or none left (maybe user is not playing from beginning),
+we then perform pitch frequency indexing.
+
+In head pitch mask indexing, we only store one mask number to represent attendance/absense of each pitch.
+We pick notes from head of a song, according to these rules:
+
+1. Pick 10 notes at most, because people has 10 fingers, and for piano score, 10 notes must contain the whole first chord.
+
+2. Unless conficted with rule 1, pick **N** difference pitches at least.
+
+3. Unless conficted with rule 1, end of picked notes must contains an entire chord.
+To tolerate tendency order error in chord, arpeggio or some fast music progress, we choose an &epsilon; interval (for example, &epsilon; = 120ms),
+the last picked note's begin time $T_x$ must satisfy:
+$$T_{x+1} - T_{x} > \epsilon$$
+
+For generating masks of candidate songs, we obey all rules.
+And for query mask, we ignore rule 3 to guarantee query mask is a subset of candidate mask for the same song.
+
+Here are examples:
+
+* *Butterfly Lovers (梁祝)*
 <div class="vue-component midi-head-mask" data-time-scale="0.018">
 	{
 		"notes": [{"start":90,"duration":680,"velocity":56,"pitch":74},{"start":632.5,"duration":610,"velocity":63,"pitch":71},{"start":1145,"duration":587.5,"velocity":73,"pitch":69},{"start":1742.5,"duration":585,"velocity":38,"pitch":55},{"start":1752.5,"duration":2230,"velocity":53,"pitch":67},{"start":2370,"duration":577.5,"velocity":45,"pitch":62},{"start":2850,"duration":552.5,"velocity":68,"pitch":59},{"start":3305,"duration":615,"velocity":64,"pitch":57},{"start":3907.5,"duration":2385,"velocity":47,"pitch":55},{"start":4522.5,"duration":657.5,"velocity":76,"pitch":69},{"start":5022.5,"duration":632.5,"velocity":84,"pitch":66},{"start":5530,"duration":550,"velocity":81,"pitch":64},{"start":6080,"duration":2265,"velocity":50,"pitch":62},{"start":6597.5,"duration":655,"velocity":59,"pitch":57},{"start":7157.5,"duration":567.5,"velocity":61,"pitch":54},{"start":7672.5,"duration":557.5,"velocity":51,"pitch":52},{"start":8242.5,"duration":1367.5,"velocity":43,"pitch":50},{"start":8955,"duration":537.5,"velocity":69,"pitch":78},{"start":9450,"duration":502.5,"velocity":89,"pitch":76},{"start":9952.5,"duration":562.5,"velocity":95,"pitch":78}]
 	}
 </div>
 
-
-*Étude Op. 10, No. 3 (Chopin)*
+* *Étude Op. 10, No. 3 (Chopin)*
 <div class="vue-component midi-head-mask" data-time-scale="0.03">
 	{
 		"notes": [{"start":93.75,"duration":243.75,"velocity":41,"pitch":59},{"start":984.375,"duration":1338.541666666666,"velocity":49,"pitch":64},{"start":1015.625,"duration":1635.416666666666,"velocity":25,"pitch":40},{"start":1027.083333333333,"duration":692.708333333333,"velocity":32,"pitch":56},{"start":1667.708333333333,"duration":697.9166666666661,"velocity":34,"pitch":59},{"start":1677.083333333333,"duration":741.6666666666661,"velocity":24,"pitch":47},{"start":2183.333333333333,"duration":659.375,"velocity":53,"pitch":63},{"start":2183.333333333333,"duration":702.083333333333,"velocity":34,"pitch":56},{"start":2704.166666666666,"duration":648.9583333333321,"velocity":51,"pitch":64},{"start":2704.166666666666,"duration":765.6249999999991,"velocity":36,"pitch":59},{"start":2704.166666666666,"duration":797.9166666666661,"velocity":23,"pitch":47},{"start":3258.333333333332,"duration":644.791666666667,"velocity":29,"pitch":57},{"start":3268.749999999999,"duration":2665.624999999999,"velocity":51,"pitch":66},{"start":3280.208333333332,"duration":2803.125,"velocity":36,"pitch":63},{"start":3301.041666666665,"duration":1448.958333333333,"velocity":28,"pitch":35},{"start":3852.083333333332,"duration":396.875,"velocity":30,"pitch":59},{"start":3862.499999999999,"duration":471.8749999999991,"velocity":24,"pitch":47},{"start":4344.791666666664,"duration":596.875,"velocity":28,"pitch":57},{"start":4857.291666666664,"duration":705.2083333333339,"velocity":28,"pitch":59},{"start":4867.70833333333,"duration":422.9166666666679,"velocity":26,"pitch":47}]
 	}
 </div>
 
-
-*Fur Elise*
+* *Fur Elise*
 <div class="vue-component midi-head-mask" data-time-scale="0.04">
 	{
 		"notes": [{"start":91.66666666666652,"duration":374.99999999999955,"velocity":41,"pitch":76},{"start":419.79166666666606,"duration":329.16666666666697,"velocity":68,"pitch":75},{"start":698.958333333333,"duration":301.04166666666606,"velocity":55,"pitch":76},{"start":941.6666666666661,"duration":309.375,"velocity":51,"pitch":75},{"start":1197.916666666666,"duration":292.70833333333394,"velocity":52,"pitch":76},{"start":1439.583333333333,"duration":293.75,"velocity":48,"pitch":71},{"start":1668.75,"duration":317.70833333333303,"velocity":59,"pitch":74},{"start":1904.166666666666,"duration":273.95833333333394,"velocity":48,"pitch":72},{"start":2150,"duration":239.58333333333303,"velocity":56,"pitch":69},{"start":2184.375,"duration":835.4166666666661,"velocity":34,"pitch":45},{"start":2408.333333333333,"duration":565.625,"velocity":45,"pitch":52},{"start":2642.708333333333,"duration":139.58333333333303,"velocity":45,"pitch":57},{"start":2888.541666666666,"duration":286.45833333333303,"velocity":57,"pitch":60},{"start":3115.624999999999,"duration":403.125,"velocity":65,"pitch":64},{"start":3356.249999999999,"duration":285.41666666666606,"velocity":65,"pitch":69},{"start":3578.124999999999,"duration":754.166666666667,"velocity":62,"pitch":71},{"start":3602.083333333332,"duration":197.91666666666697,"velocity":41,"pitch":40},{"start":3843.749999999999,"duration":201.04166666666697,"velocity":44,"pitch":52},{"start":4061.458333333333,"duration":59.375,"velocity":60,"pitch":56},{"start":4290.625,"duration":362.5,"velocity":48,"pitch":64}]
@@ -219,8 +250,18 @@ Here is a live demo to illustrate how this work:
 </div>
 
 
-<div class="vue-component chart" data-source="/charts/head-pitch-mask-set.json"></div>
+To choose a proper value for **N**, we plot the diversity graph of head pitch masks.
 
+<figure>
+	<div class="vue-component chart" data-source="/charts/head-pitch-mask-set.json"></div>
+	<figcaption>
+		Counts of unique head pitch masks to every N value, in a 4013 songs MIDI library.
+	</figcaption>
+</figure>
+
+We want to maximize head pitch mask diversity, i.e. minimize the cases of duplicated mask for different MIDI files.
+So we choose N=5, which coincide with my intuition.
+But a little surprised, we observed that the diversity to N of greater than 5 decreases quickly.
 
 
 ---
