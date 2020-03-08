@@ -25,7 +25,7 @@ Once, you want to play some music opus on a whim, and it's so bothering to retri
 therefore, you just play by memory directly.
 But the piano is so smart. Just a few seconds later, it understands what you are playing and displays the staff automatically.
 
-Let's look at another case: You see a nice piano when hanging out downtown and you are just in a mood to play a piece of music and show off your talent to passers.
+Let's look at another case: you see a nice piano when hanging out downtown and you are just in a mood to play a piece of music and show off your talent to passers.
 When you sit and play, surprisingly, the piano displays the music information about what you are playing.
 When you finish, it says, well done! Your performence beat 95% players on this opus.
 
@@ -175,7 +175,7 @@ So we store pitch frequency masks for every songs in DB, and we compute masks fo
 Then we can do a high performence music indexing.
 
 Technically, we can encode these mask codes into 11 32-bits integers (88&times;4=32&times;11),
-ordered by from center to both sides (because center area has more 1s then margins usually).
+ordered by from center to both sides (because center area has more 1s thasn margins usually).
 To reduce calculation, we exclude pure zeros in query mask codes before comparing, because zero mask won't sieve off any songs.
 And we can perform multiple passes for each query code, every pass is only performed on the rest songs after prior sifts.
 However, all above are suggestions, the algorithm details should depend on your hardware implementation and low-level APIs.
@@ -214,17 +214,18 @@ we then perform pitch frequency indexing.
 In head pitch mask indexing, we only store one mask number to represent attendance/absense of each pitch.
 We pick notes from head of a song, according to these rules:
 
-1. Pick 10 notes at most, because people has 10 fingers, and for piano score, 10 notes must contain the whole first chord.
+1. Pick 10 notes at most, because people has 10 fingers, and for piano score, 10 notes must contain the entire first chord.[^3]
 
-2. Unless conficted with rule 1, pick **N** difference pitches at least.
+2. Unless conficted with *rule 1*, pick **N** difference pitches at least. N is a constant which we will talk about later.
 
-3. Unless conficted with rule 1, end of picked notes must contains an entire chord.
-To tolerate tendency order error in chord, arpeggio or some fast music progress, we choose an tolerance interval $\epsilon$ (for example, $\epsilon$=120ms),
+3. Unless conficted with *rule 1*, end of picked notes must contains an entire chord.
+To tolerate tendency order error when user play chord, arpeggio or some fast music progress,
+we choose an tolerance interval $\epsilon$ (for example, $\epsilon$=120ms),
 the last picked note's begin time $t_x$ must satisfy:
 $$t_{x+1} - t_{x} > \epsilon$$
 
 For generating masks of candidate songs, we obey all rules.
-And for query mask, we ignore rule 3 to guarantee query mask is a subset of candidate mask for the same song.
+And for query mask, we ignore *rule 3* to guarantee query mask is a subset of candidate mask for the same song.
 
 Here are examples:
 
@@ -268,14 +269,14 @@ But a little surprised, we observed that the diversity to N of greater than 5 de
 
 In our experiment, we run our retrieving program on a MIDI music library of about 6,000 songs.
 We try *head pitch mask indexing* + *score following evaluation* firstly.
-If this failed (usually no any song left after indexing[^3], or all score following evaluation's result values are too low),
+If this failed (usually by no any song left after indexing[^4], or all score following evaluation's result values are too low),
 we try *pitch frequency indexing* every 16 notes by user playing, once left songs count is less than 100, then run score following evaluation.
 We observed that about 60% tests can be accomplished by first method (head + following),
 and among the rest of cases, about 80% tests can be accomplished in first 2 attempts (32 notes).
 Benefit from high performance score following algorithm, most retrieving tests can be accomplished in 20 seconds (from when first note played).
 
 There are also some pending issues, such as splitting problem.
-When our program continuously listens to user playing multiple songs, how to precisely determine where is the songs' boundary?
+When our program continuously listens to multiple songs from user, how to precisely determine where is the songs' boundary?
 Regarding people playing's improvisity, score following won't give a reasonable answer always.
 When to break score following state and return to a new retrieving, that's an open question.
 I think we need a sophisticated policy to integrate score following results and notes' interval information.
@@ -284,7 +285,8 @@ I think we need a sophisticated policy to integrate score following results and 
 ---
 [^1]: Paper: [MIDIZ: content based indexing and retrieving MIDI files](http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0104-65001999000300002)
 [^2]: MIDIZ use 2<sup>k</sup>-1 dimensional vectors, usually set k=3.
-[^3]: Usually because of user played error notes in head.
+[^3]: The notes count up limit is to avoid some song with too many repeat pitches at head, which may delay query.
+[^4]: Probably because of user played error notes in head.
 
 
 
