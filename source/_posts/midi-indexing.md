@@ -1,13 +1,15 @@
 ---
 author: k-l-lambda
-coauthor: k-l-lambda
-email: k-l-lambda@gmail.com
+email: k.l.lambda@gmail.com
 title: A proposal for content based MIDI files indexing and retrieving on piano
-mathjax: true
 tags:
-- music
-- midi
+  - music
+  - midi
+coauthor: k-l-lambda
+mathjax: true
+date: 2020-03-08 13:12:57
 ---
+
 
 <figure>
 	<picture>
