@@ -29,7 +29,7 @@ But the piano is so smart. Just a few seconds later, it understands what you are
 
 Let's look at another case: you see a nice piano when hanging out downtown and you are just in a mood to play a piece of music and show off your talent to passers.
 When you sit and play, surprisingly, the piano displays the music information about what you are playing.
-When you finish, it says, well done! Your performence beat 95% players on this opus.
+When you finish, it says, well done! Your performance beat 95% players on this opus.
 
 Imaginary scenes above are coming true. Now let's talk about some ideas for implementing such a technique.
 
@@ -49,7 +49,7 @@ This scheme has several advantages:
 Because wavelet transformed vectors only extract relative pitch information.
 
 * Pitch error tolerant. Euclidean distance magnitude of feature vectors reflect the similarity of melody fragments.
-If query melody have slight off-pitch from correct source melody, distance loss will keep tiny.
+If query melody has slight off-pitch from correct source melody, distance loss will keep tiny.
 
 However, for our particular purpose of piano playing, there are some issues in this scheme:
 
@@ -60,16 +60,16 @@ some MIDI files made from piano staff splits tracks by left/right hand, not voic
 
 * Furthermore, harmony voices are meaningful.
 Most of popular songs have serval versions sharing the same melody, but with different harmony arrangement.
-Query notes in harmony voice can be just the fingerprint of user searching goal.
+Query notes in harmony voice can be just a fingerprint of the user searching goal.
 
-* The notes sequence processing is sensitive with omit/extra note.
+* The notes sequence processing is sensitive to omit/extra note.
 Though a deviated note can be tolerant by this scheme, but omit/extra ones are not.
-Because note count change will break fragment splitting, especially when interval between 2 errors is less than fragment length 2<sup>k</sup>.
+Because note count change will break fragment splitting, especially when an interval between 2 errors is less than fragment length 2<sup>k</sup>.
 
 We propose a new approach to deal with MIDI retrieving with input interface of piano playing, which partitions this task into 2 phases:
 pitch frequency indexing (rough phase) and music fuzzy matching (fine phase). The fine phase is also a robust score following algorithm,
-which play a key role in the smart piano user interactive system, also a pending patent.
-I hope there is another opportunity to talk details of the score following method. In this article we focus on the rough phase.
+which plays a key role in the smart piano user interactive system, also a pending patent.
+I hope there is another opportunity to talk details of the score following method. In this article, we focus on the rough phase.
 
 
 ## How it works
@@ -77,11 +77,11 @@ I hope there is another opportunity to talk details of the score following metho
 A score following program is an agent to guess where place in a specific music score, the user is playing at right now.
 As hint by the word *guess* (or *fuzzy*), the program will output a confidence value to tell how confident it believes itself result.
 
-Now, what if we use a wrong score to follow? Obviously, any possible guessing won't be with a high confidence.
-Probably some fragment in user playing sequence is similar with the (wrongly) specific score someplace, but the matching must be highly fragmentized.
+Now, what if we use a wrong score to follow? Obviously, any possible guessing won't be with high confidence.
+Probably some fragment in user playing sequence is similar to the (wrongly) specific score someplace, but the matching must be highly fragmentized.
 If we measure the typical continuous following length with a proper confidence threshold, a normal score following will completely beat a wrong score following.
 
-So now we have a touchstone to check how well a music score match what user is playing, and if we run this program on all scores we possess simultaneously,
+So now we have a touchstone to check how well a music score matches what the user is playing, and if we run this program on all scores we possess simultaneously,
 we are able to pick the best matching score by results sorting. Certainly, it's not practicable&#x1f604;.
 However, if we sieve off those obvious impossible candidates, and a small left magnitude can be affordable.
 So this is the rough phase, the design aim is fast and concurrency, not precise. And for possible candidates, rather let it go than kill.
@@ -89,16 +89,16 @@ So this is the rough phase, the design aim is fast and concurrency, not precise.
 To construct a MIDI indexing, available properties of music piece include pitch, time and velocity (strength).
 Velocity/strength is out firstly because of its highly mutable.
 Time property is valuable to identify a score, but the time data recorded from human playing is usually recorded in millisecond or microsecond,
-which is very continuous (in contrast, pitch values from keyboard instrument are always discrete in semitone), and difficult to extract identify information.
-However, the time information utilizing is an open problem to exploit in future.
+which is very continuous (in contrast, pitch values from keyboard instruments are always discrete in semitone), and difficult to extract identifying information.
+However, time information utilizing is an open problem to exploit in the future.
 
 Inevitably, pitch is the last option.
 To fast index scores, we convert the pitch characteristic of entire candidate score (or user playing) notes into serval integer numbers.
-The filter operation, pass or failure judgement is done by binary number calculation, which is fast and constant to single score length
+The filter operation, pass or failure judgment is done by binary number calculation, which is fast and constant to single score length
 ($O(n)$ to candidate scores count, but can be optimized by concurrency).
 
-The pitch characteristic is accumulatable to notes, and a music piece with more notes has stronger characteristic,
-i.e. as user keep playing, more and more candidate scores will be sieved off.
+The pitch characteristic is accumulative to notes, and a music piece with more notes has stronger characteristics,
+i.e. as the user keeps playing, more and more candidate scores will be sieved off.
 Once candidate scores count is lower than an affordable threshold, we will run the fine phase.
 
 We define an efficiency benchmark:
@@ -124,14 +124,14 @@ As playing goes on, the probability of B over C keeps increasing.
 
 We can just compare every pitch frequency one by one to perform the checking,
 but dozens integer comparing per song has heavy costs for a large library.
-We optimize this by coarsen pitch frequency histogram to several bit mask codes.
-Piano has 88 keys, rather than to store 88 numbers vertically, we can also store the information horizontally,
-i.e. by a 88 bits binary number, whose each bit represents one pitch's attendance/absence.
-Furthermore, we set **T** thresholds (for example: T=4),
+We optimize this by coarsening pitch frequency histogram to several bit mask codes.
+A piano has 88 keys, rather than to store 88 numbers vertically, we can also store the information horizontally,
+i.e. by an 88 bits binary number, whose each bit represents one pitch's attendance/absence.
+Furthermore, we set **T** thresholds (for example T=4),
 and use T bit mask codes to store whether each pitch frequency number is over the corresponding threshold.
 
 To choose these thresholds reasonably, we plot the pitch frequency distribution graph for a typical music set,
-which contains hundreds popular classical and modern songs.
+which contains hundreds of popular classical and modern songs.
 
 <figure>
 	<div class="vue-component chart" data-type="Line" data-source="/charts/score-pitch-frequency-dist.json"></div>
@@ -140,7 +140,7 @@ which contains hundreds popular classical and modern songs.
 	</figcaption>
 </figure>
 
-To tolerate sporadic error notes, we set the lowest threshold to 4. And for columns above 4, we divide pitch columns to four sections equally.
+To tolerate sporadic error notes, we set the lowest threshold to 4. And for columns above 4, we divide pitch columns into four sections equally.
 Then the values on every boundary are our thresholds. Coincidentally, they are exactly on powers of 2.
 
 Here is an example, the entire MIDI's pitch frequency histogram of _Minuet in G Major_:
@@ -151,8 +151,8 @@ And the coarsen result:
 
 <div class="vue-component chart" data-source="/charts/pitch-mask-minuet-in-Gmajor.json"></div>
 
-All frequency columns are coarsen to four ranks according to thresholds of 4, 8, 16, 32.
-Finally we get four bit masks (converting black blocks to 1, white blocks to 0):
+All frequency columns are coarsened to four ranks according to thresholds of 4, 8, 16, 32.
+Finally, we get four bitmasks (converting black blocks to 1, white blocks to 0):
 
 ```
   0b0000000000000000000000100000010101101011010101101011110101101010000000000000000000000000
@@ -173,14 +173,14 @@ songCheck = (queryMasks, songMasks) =>
 	&& maskCheck(queryMasks[3], songMasks[3]);
 ```
 
-So we store pitch frequency masks for every songs in DB, and we compute masks for user played notes in real time.
-Then we can do a high performence music indexing.
+So we store pitch frequency masks for every song in DB, and we compute masks for user played notes in real-time.
+Then we can do a high-performance music indexing.
 
 Technically, we can encode these mask codes into 11 32-bits integers (88&times;4=32&times;11),
-ordered by from center to both sides (because center area has more 1s thasn margins usually).
+ordered by from center to both sides (because the center area has more 1s than margins usually).
 To reduce calculation, we exclude pure zeros in query mask codes before comparing, because zero mask won't sieve off any songs.
 And we can perform multiple passes for each query code, every pass is only performed on the rest songs after prior sifts.
-However, all above are suggestions, the algorithm details should depend on your hardware implementation and low-level APIs.
+However, all the above are suggestions, the algorithm details should depend on your hardware implementation and low-level APIs.
 
 Here is a live demo to illustrate how this work:
 
@@ -202,25 +202,25 @@ Here is a live demo to illustrate how this work:
 </figure>
 
 You may notice that some song takes quite a long time to exclude all other songs.
-Firstly, our purpose for this phase is not exclude all other songs, but shrink the possible range into an affordable size.
-Secondly, we have another supplementary trick in next chapter.
+Firstly, our purpose for this phase is not to exclude all other songs, but shrink the possible range into an affordable size.
+Secondly, we have another supplementary trick in the next chapter.
 
 ## Head pitch mask indexing
 
-In most cases, people play a piece of music from beginning rather than from somewhere middle.
+In most cases, people play a piece of music from the beginning rather than from somewhere middle.
 Pitches combination to the head a few notes is also a characteristic signature.
 So we can use the head pitch mask indexing as an alternative music sift method,
-if this failed, i.e. too many songs left or none left (maybe user is not playing from beginning),
+if this failed, i.e. too many songs left or none left (maybe the user is not playing from the beginning),
 we then perform pitch frequency indexing.
 
-In head pitch mask indexing, we only store one mask number to represent attendance/absense of each pitch.
-We pick notes from head of a song, according to these rules:
+In head pitch mask indexing, we only store one mask number to represent the attendance/absence of each pitch.
+We pick notes from the head of a song, according to these rules:
 
-1. Pick 10 notes at most, because people has 10 fingers, and for piano score, 10 notes must contain the entire first chord.[^3]
+1. Pick 10 notes at most, because people have 10 fingers, and for piano score, 10 notes must contain the entire first chord.[^3]
 
-2. Unless conficted with *rule 1*, pick **N** difference pitches at least. N is a constant which we will mention later.
+2. Unless conflicted with *rule 1*, pick **N** difference pitches at least. N is a constant which we will mention later.
 
-3. Unless conficted with *rule 1*, end of picked notes must contains an entire chord.
+3. Unless conflicted with *rule 1*, end of picked notes must contain an entire chord.
 To tolerate tendency order error when user play chord, arpeggio or some fast music progress,
 we choose an tolerance interval $\epsilon$ (for example, $\epsilon$=120ms),
 the last picked note's begin time $t_x$ must satisfy:
@@ -262,7 +262,7 @@ To choose a proper value for **N**, we plot the diversity graph of head pitch ma
 	</figcaption>
 </figure>
 
-We want to maximize head pitch mask diversity, i.e. minimize the cases of duplicated mask for different MIDI files.
+We want to maximize head pitch mask diversity, i.e. minimize the cases of duplicated masks for different MIDI files.
 So we choose N=5, which coincide with my intuition.
 But a little surprised, we observed that the diversity to N of greater than 5 decreases quickly.
 
@@ -273,22 +273,22 @@ In our experiment, we run our retrieving program on a MIDI music library of abou
 We try *head pitch mask indexing* + *score following evaluation* firstly.
 If this failed (usually by no any song left after indexing[^4], or all score following evaluation's result values are too low),
 we try *pitch frequency indexing* every 16 notes by user playing, once left songs count is less than 100, then run score following evaluation.
-We observed that about 60% tests can be accomplished by first method (head + following),
-and among the rest of cases, about 80% tests can be accomplished in first 2 attempts (32 notes).
-Benefit from high performance score following algorithm, most retrieving tests can be accomplished in 20 seconds (from when first note played).
+We observed that about 60% of tests can be accomplished by the first method (head + following),
+and among the rest of the cases, about 80% of tests can be accomplished in the first 2 attempts (32 notes).
+Benefit from high-performance score following algorithm, most retrieving tests can be accomplished in 20 seconds (from when first note played).
 
-There are also some pending issues, such as splitting problem.
-When our program continuously listens to multiple songs from user, how to precisely determine where is the songs' boundary?
+There are also some pending issues, such as the splitting problem.
+When our program continuously listens to multiple songs from a user, how to precisely determine where is the songs' boundary?
 Regarding people playing's improvisity, score following won't give a reasonable answer always.
-When to break score following state and return to a new retrieving, that's an open question.
+When to break the score following state and return to a new retrieving, that's an open question.
 I think we need a sophisticated policy to integrate score following results and notes' interval information.
 
 
 ---
 [^1]: Paper: [MIDIZ: content based indexing and retrieving MIDI files](http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0104-65001999000300002)
 [^2]: MIDIZ use 2<sup>k</sup>-1 dimensional vectors, usually set k=3.
-[^3]: The notes count up limit is to avoid some song with too many repeat pitches at head, which may delay query.
-[^4]: Probably because of user played error notes in head.
+[^3]: The notes count up limit is to avoid some song with too many repeat pitches at the head, which may delay query.
+[^4]: Probably because of user played error notes in the head.
 
 
 
