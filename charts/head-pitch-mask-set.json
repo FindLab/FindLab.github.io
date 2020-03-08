@@ -1,0 +1,1 @@
+{"series":{"name":"diversity","data":[980,1236,1848,2075,2162,1978,1616,1079,530,261],"type":"line"},"xAxis":{"name":"N","type":"category","data":[1,2,3,4,5,6,7,8,9,10]},"yAxis":{"name":"diversity","type":"value"},"grid":{"right":40,"bottom":20},"markLine":{"data":[{"name":"songs count","yAxis":4013}]}}
