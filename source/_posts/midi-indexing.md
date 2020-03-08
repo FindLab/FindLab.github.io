@@ -218,7 +218,7 @@ We pick notes from head of a song, according to these rules:
 
 1. Pick 10 notes at most, because people has 10 fingers, and for piano score, 10 notes must contain the entire first chord.[^3]
 
-2. Unless conficted with *rule 1*, pick **N** difference pitches at least. N is a constant which we will talk about later.
+2. Unless conficted with *rule 1*, pick **N** difference pitches at least. N is a constant which we will mention later.
 
 3. Unless conficted with *rule 1*, end of picked notes must contains an entire chord.
 To tolerate tendency order error when user play chord, arpeggio or some fast music progress,
