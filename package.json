@@ -29,25 +29,28 @@
     "hexo-renderer-stylus": "^1.1.0",
     "hexo-server": "^1.0.0",
     "hexo-theme-next": "theme-next/hexo-theme-next",
-    "vue": "^2.6.10",
+    "vue": "^2.6.11",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.3.0"
   },
   "devDependencies": {
-    "@k-l-lambda/web-widgets": "^0.0.1",
+    "@k-l-lambda/web-widgets": "^0.2.7",
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-plugin-eslint": "^4.1.0",
     "@vue/cli-service": "^4.1.0",
     "babel-eslint": "^10.0.3",
     "cpx": "^1.5.0",
+    "echarts": "^4.6.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "gulp": "^4.0.2",
     "gulp-eslint": "^6.0.0",
     "gulp-shell": "^0.8.0",
+    "lodash": "^4.17.15",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.0",
     "typescript": "~3.5.3",
+    "v-charts": "^1.19.0",
     "vue-template-compiler": "^2.6.10"
   }
 }
