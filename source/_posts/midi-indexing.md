@@ -48,10 +48,10 @@ This scheme has several advantages:
 * Key insensitive, i.e. the query melody can be on a different key with source melody.
 Because wavelet transformed vectors only extract relative pitch information.
 
-* Pitch error tolerant. Euclidean distance magnitude of feature vectors reflect the similarity of melody fragments.
+* Pitch error tolerance. Euclidean distance magnitude of feature vectors reflects the similarity of melody fragments.
 If query melody has slight off-pitch from correct source melody, distance loss will keep tiny.
 
-However, for our particular purpose of piano playing, there are some issues in this scheme:
+However, for our particular purpose of MIDI retrieving for piano playing, there are some issues in this scheme:
 
 * Wavelet transform is performing on a single melody line, while a piano music opus usually has rich harmony texture,
 and splitting melody voice from the whole music texture is troublesome:
@@ -59,17 +59,17 @@ some polyphony music piece has no definite main melody line,
 some MIDI files made from piano staff splits tracks by left/right hand, not voices.
 
 * Furthermore, harmony voices are meaningful.
-Most of popular songs have serval versions sharing the same melody, but with different harmony arrangement.
-Query notes in harmony voice can be just a fingerprint of the user searching goal.
+Most of popular songs have several versions sharing the same melody, but with different harmony arrangements.
+Query notes in harmony voice can be just a fingerprint of the user's searching goals.
 
 * The notes sequence processing is sensitive to omit/extra note.
 Though a deviated note can be tolerant by this scheme, but omit/extra ones are not.
-Because note count change will break fragment splitting, especially when an interval between 2 errors is less than fragment length 2<sup>k</sup>.
+Because note count change will break fragments splitting, especially when an interval between 2 errors is less than fragment length 2<sup>k</sup>.
 
-We propose a new approach to deal with MIDI retrieving with input interface of piano playing, which partitions this task into 2 phases:
+We propose a new approach to deal with MIDI retrieving with input interface of piano playing, which divides this task into 2 phases:
 pitch frequency indexing (rough phase) and music fuzzy matching (fine phase). The fine phase is also a robust score following algorithm,
 which plays a key role in the smart piano user interactive system, also a pending patent.
-I hope there is another opportunity to talk details of the score following method. In this article, we focus on the rough phase.
+I hope there is another opportunity to talk about the details of the score following method. In this article, we focus on the rough phase.
 
 
 ## How it works
@@ -93,7 +93,7 @@ which is very continuous (in contrast, pitch values from keyboard instruments ar
 However, time information utilizing is an open problem to exploit in the future.
 
 Inevitably, pitch is the last option.
-To fast index scores, we convert the pitch characteristic of entire candidate score (or user playing) notes into serval integer numbers.
+To fast index scores, we convert the pitch characteristic of entire candidate score (or user playing) notes into several integer numbers.
 The filter operation, pass or failure judgment is done by binary number calculation, which is fast and constant to single score length
 ($O(n)$ to candidate scores count, but can be optimized by concurrency).
 
