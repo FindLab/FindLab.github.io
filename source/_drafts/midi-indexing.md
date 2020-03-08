@@ -20,16 +20,16 @@ tags:
 
 ## Motivation
 
-Imagine you have a smart piano at home, which connected with a huge music staff library.
-Once, you wanna play some muic opus on a whim, and it's so bothering to retrieve music staff in either category menus or a long favorite list,
-that you just play by memory directly.
-But the piano is so smart, just a few seconds later, it understands what you are playing, and displays the staff automatically.
+Imagine you have a smart piano at home, which is connected with a huge music staff library.
+Once, you want to play some music opus on a whim, and it's so bothering to retrieve music staff in either category menus or a long favorite list,
+therefore, you just play by memory directly.
+But the piano is so smart. Just a few seconds later, it understands what you are playing and displays the staff automatically.
 
-Another case. You see a nice piano when hanging out downtown, and you are just in a mood to play a piece of music and show off your talent to passers.
-When you sit and play, surprisingly, the piano displays out the music information for what you are playing.
-And when you finish, it says, well done! Your performence beat 95% players on this opus.
+Let's look at another case: You see a nice piano when hanging out downtown and you are just in a mood to play a piece of music and show off your talent to passers.
+When you sit and play, surprisingly, the piano displays the music information about what you are playing.
+When you finish, it says, well done! Your performence beat 95% players on this opus.
 
-Imaginary scenes above are comming true. Now let's talk about some ideas for implementing such a technique.
+Imaginary scenes above are coming true. Now let's talk about some ideas for implementing such a technique.
 
 <!-- more -->
 
