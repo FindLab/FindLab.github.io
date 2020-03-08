@@ -73,25 +73,25 @@ I hope there is another opportunity to talk details of the score following metho
 ## How it works
 
 A score following program is an agent to guess where place in a specific music score, the user is playing at right now.
-As hint by the word *guess* (or *fuzzy*), the program will output a confidence value to tell how confident it believes its result.
+As hint by the word *guess* (or *fuzzy*), the program will output a confidence value to tell how confident it believes itself result.
 
-Now, what if we use a wrong score? Obviously, any possible guessing won't be with a high confidence.
-Maybe some fragment in user playing sequence is similar with the (wrongly) specific score someplace, but the matching must be highly fragmentized.
+Now, what if we use a wrong score to follow? Obviously, any possible guessing won't be with a high confidence.
+Probably some fragment in user playing sequence is similar with the (wrongly) specific score someplace, but the matching must be highly fragmentized.
 If we measure the typical continuous following length with a proper confidence threshold, a normal score following will completely beat a wrong score following.
 
-So we have a touchstone to check how well a music score match what user are playing, and if we run this program on all scores we have simultaneously,
+So now we have a touchstone to check how well a music score match what user is playing, and if we run this program on all scores we possess simultaneously,
 we are able to pick the best matching score by results sorting. Certainly, it's not practicable&#x1f604;.
 However, if we sieve off those obvious impossible candidates, and a small left magnitude can be affordable.
 So this is the rough phase, the design aim is fast and concurrency, not precise. And for possible candidates, rather let it go than kill.
 
 To construct a MIDI indexing, available properties of music piece include pitch, time and velocity (strength).
-Velocity/strength is out firstly because its highly mutable.
-Time property is valuable to identify a score, but the time data to record human playing is usually in millisecond or microsecond,
-which is very continuous (not as discrete as pitch on keyboard instrument), and difficult to extract identify information.
+Velocity/strength is out firstly because of its highly mutable.
+Time property is valuable to identify a score, but the time data recorded from human playing is usually recorded in millisecond or microsecond,
+which is very continuous (in contrast, pitch values from keyboard instrument are always discrete in semitone), and difficult to extract identify information.
 However, the time information utilizing is an open problem to exploit in future.
 
 Inevitably, pitch is the last option.
-To fast index scores, we convert the pitch characteristic of a whole candidate score (or user playing) notes into serval integer numbers.
+To fast index scores, we convert the pitch characteristic of entire candidate score (or user playing) notes into serval integer numbers.
 The filter operation, pass or failure judgement is done by binary number calculation, which is fast and constant to single score length
 ($O(n)$ to candidate scores count, but can be optimized by concurrency).
 
@@ -103,12 +103,12 @@ We define an efficiency benchmark:
 
 $$ \textrm{filter stregth} := 1 - \frac{\textrm{left candidate count}}{\textrm{total candidate count}} $$
 
-As long as we didn't miss the potential goal score, we will do our best to enhance filter strength.
+As long as we didn't miss the potential goal score, we will do our best to enhance the filter strength.
 
 
 ## Pitch frequency indexing
 
-For a particular MIDI file, the attendance frequency of every pitches can be used as a unique signature.
+For a particular MIDI file, the attendance frequency of every pitch can be used as a unique signature.
 Try to play this MIDI file, and the histogram below will illustrate what is *pitch frequency* we talk about.
 
 <div class="vue-component midi-pitches-counter" data-midi-url="/midi/Minuets_in_G_major.mid"></div>
@@ -150,7 +150,7 @@ And the coarsen result:
 <div class="vue-component chart" data-source="/charts/pitch-mask-minuet-in-Gmajor.json"></div>
 
 All frequency columns are coarsen to four ranks according to thresholds of 4, 8, 16, 32.
-Finnally we get four bit masks (converting black blocks to 1, white blocks to 0):
+Finally we get four bit masks (converting black blocks to 1, white blocks to 0):
 
 ```
   0b0000000000000000000000100000010101101011010101101011110101101010000000000000000000000000
@@ -175,7 +175,7 @@ So we store pitch frequency masks for every songs in DB, and we compute masks fo
 Then we can do a high performence music indexing.
 
 Technically, we can encode these mask codes into 11 32-bits integers (88&times;4=32&times;11),
-ordered by from center to both sides (because center area has more 1s then margins).
+ordered by from center to both sides (because center area has more 1s then margins usually).
 To reduce calculation, we exclude pure zeros in query mask codes before comparing, because zero mask won't sieve off any songs.
 And we can perform multiple passes for each query code, every pass is only performed on the rest songs after prior sifts.
 However, all above are suggestions, the algorithm details should depend on your hardware implementation and low-level APIs.
@@ -194,7 +194,7 @@ Here is a live demo to illustrate how this work:
 	<div class="vue-component midi-pitches-mask" data-source-list="#midi-list"></div>
 	<figcaption style="text-align: left">
 		<span style="color: #3ea6ef">&#x275a;</span> coarse pitch histogram of candidate MIDI<br/>
-		<span style="color: #00e5b0">&#x275a;</span> pitch histogram of query MIDI<br/>
+		<span style="color: #00e5b0">&#x275a;</span> full pitch histogram of query MIDI<br/>
 		<span style="color: red">&#x275a;</span> coarse pitch histogram of query MIDI<br/>
 	</figcaption>
 </figure>
@@ -219,9 +219,9 @@ We pick notes from head of a song, according to these rules:
 2. Unless conficted with rule 1, pick **N** difference pitches at least.
 
 3. Unless conficted with rule 1, end of picked notes must contains an entire chord.
-To tolerate tendency order error in chord, arpeggio or some fast music progress, we choose an &epsilon; interval (for example, &epsilon; = 120ms),
-the last picked note's begin time $T_x$ must satisfy:
-$$T_{x+1} - T_{x} > \epsilon$$
+To tolerate tendency order error in chord, arpeggio or some fast music progress, we choose an tolerance interval $\epsilon$ (for example, $\epsilon$=120ms),
+the last picked note's begin time $t_x$ must satisfy:
+$$t_{x+1} - t_{x} > \epsilon$$
 
 For generating masks of candidate songs, we obey all rules.
 And for query mask, we ignore rule 3 to guarantee query mask is a subset of candidate mask for the same song.
@@ -264,9 +264,27 @@ So we choose N=5, which coincide with my intuition.
 But a little surprised, we observed that the diversity to N of greater than 5 decreases quickly.
 
 
+## Next step
+
+In our experiment, we run our retrieving program on a MIDI music library of about 6,000 songs.
+We try *head pitch mask indexing* + *score following evaluation* firstly.
+If this failed (usually no any song left after indexing[^3], or all score following evaluation's result values are too low),
+we try *pitch frequency indexing* every 16 notes by user playing, once left songs count is less than 100, then run score following evaluation.
+We observed that about 60% tests can be accomplished by first method (head + following),
+and among the rest of cases, about 80% tests can be accomplished in first 2 attempts (32 notes).
+Benefit from high performance score following algorithm, most retrieving tests can be accomplished in 20 seconds (from when first note played).
+
+There are also some pending issues, such as splitting problem.
+When our program continuously listens to user playing multiple songs, how to precisely determine where is the songs' boundary?
+Regarding people playing's improvisity, score following won't give a reasonable answer always.
+When to break score following state and return to a new retrieving, that's an open question.
+I think we need a sophisticated policy to integrate score following results and notes' interval information.
+
+
 ---
 [^1]: Paper: [MIDIZ: content based indexing and retrieving MIDI files](http://www.scielo.br/scielo.php?script=sci_arttext&pid=S0104-65001999000300002)
 [^2]: MIDIZ use 2<sup>k</sup>-1 dimensional vectors, usually set k=3.
+[^3]: Usually because of user played error notes in head.
 
 
 
