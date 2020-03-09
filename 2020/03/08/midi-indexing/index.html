@@ -28,7 +28,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://findlab.github.io/images/gfind-crystal.png">
 <meta property="article:published_time" content="2020-03-08T13:12:57.000Z">
-<meta property="article:modified_time" content="2020-03-08T14:12:07.207Z">
+<meta property="article:modified_time" content="2020-03-09T01:54:09.999Z">
 <meta property="article:author" content="FindLab">
 <meta property="article:tag" content="music">
 <meta property="article:tag" content="midi">
@@ -183,10 +183,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-03-08 13:12:57 / Modified: 14:12:07" itemprop="dateCreated datePublished" datetime="2020-03-08T13:12:57+00:00">2020-03-08</time>
+              <time title="Created: 2020-03-08 13:12:57" itemprop="dateCreated datePublished" datetime="2020-03-08T13:12:57+00:00">2020-03-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-03-09 01:54:09" itemprop="dateModified" datetime="2020-03-09T01:54:09+00:00">2020-03-09</time>
+              </span>
 
           
   <span class="post-meta-item">
@@ -234,30 +240,30 @@ This scheme has several advantages:</p>
 <li><p>Key insensitive, i.e. the query melody can be on a different key with source melody.
 Because wavelet transformed vectors only extract relative pitch information.</p>
 </li>
-<li><p>Pitch error tolerant. Euclidean distance magnitude of feature vectors reflect the similarity of melody fragments.
+<li><p>Pitch error tolerance. Euclidean distance magnitude of feature vectors reflects the similarity of melody fragments.
 If query melody has slight off-pitch from correct source melody, distance loss will keep tiny.</p>
 </li>
 </ul>
-<p>However, for our particular purpose of piano playing, there are some issues in this scheme:</p>
+<p>However, for our particular purpose of MIDI retrieving for piano playing, there are some issues in this scheme:</p>
 <ul>
 <li><p>Wavelet transform is performing on a single melody line, while a piano music opus usually has rich harmony texture,
 and splitting melody voice from the whole music texture is troublesome:
 some polyphony music piece has no definite main melody line,
 some MIDI files made from piano staff splits tracks by left/right hand, not voices.</p>
 </li>
-<li><p>Furthermore, harmony voices are meaningful.
-Most of popular songs have serval versions sharing the same melody, but with different harmony arrangement.
-Query notes in harmony voice can be just a fingerprint of the user searching goal.</p>
+<li><p>Furthermore, harmony voices are meaningful, which are ignored.
+Most of popular songs have several versions sharing the same melody, but with different harmony arrangements.
+Query notes in harmony voice can be just a fingerprint of the user&#39;s searching goals.</p>
 </li>
 <li><p>The notes sequence processing is sensitive to omit/extra note.
 Though a deviated note can be tolerant by this scheme, but omit/extra ones are not.
-Because note count change will break fragment splitting, especially when an interval between 2 errors is less than fragment length 2<sup>k</sup>.</p>
+Because note count change will break fragments splitting, especially when an interval between 2 neighbor error places is less than fragment length 2<sup>k</sup>.</p>
 </li>
 </ul>
-<p>We propose a new approach to deal with MIDI retrieving with input interface of piano playing, which partitions this task into 2 phases:
+<p>We propose a new approach to deal with MIDI retrieving with input interface of piano playing, which divides this task into 2 phases:
 pitch frequency indexing (rough phase) and music fuzzy matching (fine phase). The fine phase is also a robust score following algorithm,
 which plays a key role in the smart piano user interactive system, also a pending patent.
-I hope there is another opportunity to talk details of the score following method. In this article, we focus on the rough phase.</p>
+I hope there is another opportunity to talk about the details of the score following method. In this article, we focus on the rough phase.</p>
 <h2 id="How-it-works"><a href="#How-it-works" class="headerlink" title="How it works"></a>How it works</h2><p>A score following program is an agent to guess where place in a specific music score, the user is playing at right now.
 As hint by the word <em>guess</em> (or <em>fuzzy</em>), the program will output a confidence value to tell how confident it believes itself result.</p>
 <p>Now, what if we use a wrong score to follow? Obviously, any possible guessing won&#39;t be with high confidence.
@@ -273,7 +279,7 @@ Time property is valuable to identify a score, but the time data recorded from h
 which is very continuous (in contrast, pitch values from keyboard instruments are always discrete in semitone), and difficult to extract identifying information.
 However, time information utilizing is an open problem to exploit in the future.</p>
 <p>Inevitably, pitch is the last option.
-To fast index scores, we convert the pitch characteristic of entire candidate score (or user playing) notes into serval integer numbers.
+To fast index scores, we convert the pitch characteristic of entire candidate score (or user playing) notes into several integer numbers.
 The filter operation, pass or failure judgment is done by binary number calculation, which is fast and constant to single score length
 ($O(n)$ to candidate scores count, but can be optimized by concurrency).</p>
 <p>The pitch characteristic is accumulative to notes, and a music piece with more notes has stronger characteristics,
