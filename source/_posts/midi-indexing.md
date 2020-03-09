@@ -58,13 +58,13 @@ and splitting melody voice from the whole music texture is troublesome:
 some polyphony music piece has no definite main melody line,
 some MIDI files made from piano staff splits tracks by left/right hand, not voices.
 
-* Furthermore, harmony voices are meaningful.
+* Furthermore, harmony voices are meaningful, which are ignored.
 Most of popular songs have several versions sharing the same melody, but with different harmony arrangements.
 Query notes in harmony voice can be just a fingerprint of the user's searching goals.
 
 * The notes sequence processing is sensitive to omit/extra note.
 Though a deviated note can be tolerant by this scheme, but omit/extra ones are not.
-Because note count change will break fragments splitting, especially when an interval between 2 errors is less than fragment length 2<sup>k</sup>.
+Because note count change will break fragments splitting, especially when an interval between 2 neighbor error places is less than fragment length 2<sup>k</sup>.
 
 We propose a new approach to deal with MIDI retrieving with input interface of piano playing, which divides this task into 2 phases:
 pitch frequency indexing (rough phase) and music fuzzy matching (fine phase). The fine phase is also a robust score following algorithm,
