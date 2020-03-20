@@ -58,7 +58,7 @@ and splitting melody voice from the whole music texture is troublesome:
 some polyphony music piece has no definite main melody line,
 some MIDI files made from piano staff splits tracks by left/right hand, not voices.
 
-* Furthermore, harmony voices are meaningful, which are ignored.
+* Furthermore, harmony voices are meaningful, but ignored by this scheme.
 Most of popular songs have several versions sharing the same melody, but with different harmony arrangements.
 Query notes in harmony voice can be just a fingerprint of the user's searching goals.
 
