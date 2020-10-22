@@ -1,7 +1,7 @@
 ---
 author: k-l-lambda
 coauthor: k-l-lambda
-title: We have ported Lilypond to Android
+title: We ported Lilypond to Android
 tags:
   - sheet music
   - lilypond
@@ -9,6 +9,9 @@ tags:
 
 
 {% youtube ay13Dk6D60M %}
+<figure>
+<figcaption>The Android porting of Lilypond has been done by us, you're welcome.</figcaption>
+</figure>
 
 
 As a sheet music program, [Lilypond](https://lilypond.org/) is high-quality and sophisticated, but not modern as its several competitors,
