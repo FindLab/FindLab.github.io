@@ -1,11 +1,15 @@
 ---
 author: k-l-lambda
-coauthor: k-l-lambda
+email: k.l.lambda@gmail.com
 title: We ported Lilypond to Android
 tags:
   - sheet music
   - lilypond
+author: k-l-lambda
+coauthor: k-l-lambda
+date: 2020-10-23 22:48:31
 ---
+
 
 
 {% youtube ay13Dk6D60M %}
