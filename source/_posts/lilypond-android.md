@@ -38,5 +38,5 @@ For future, we are considering these issues:
   so that avoid re-parsing ly code every time for trivial change?
   Also possibly we can implement an HTML5 renderer for this intermediate format.
 
-This is our [forked repository of Lilypond](https://gitlab.com/k.l.lambda/lilypond).
+This is our [forked repository of Lilypond on GitLab](https://gitlab.com/k.l.lambda/lilypond).
 Welcome to disucss technical details here.
