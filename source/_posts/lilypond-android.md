@@ -25,6 +25,9 @@ working with HTML5 facilitates animating features development, and mobile device
 Yes, serving requests online is an option, but the service is inevitably expensive and slow.
 Computing on the device is still the best practice.
 
+<!-- more -->
+
+
 This attempt is a start. We demonstrated that porting Lilypond to Android can be got through.
 Certainly it can be implemented in a neater, official way.
 For future, we are considering these issues:
