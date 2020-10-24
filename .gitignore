@@ -9,3 +9,4 @@ footages
 themes/*
 yarn.lock
 source/vue/
+*.local

@@ -44,3 +44,12 @@ custom_file_path:
 
 kramed:
   smartypants: false
+
+gitalk:
+  enable: true
+  github_id: FindLab
+  repo: 'FindLab.github.io'
+  client_id: '73a7d89d4b8dfc63f9f9'
+  #client_secret: '****************************************'
+  adminUser: FindLab
+  distraction_free_mode: true

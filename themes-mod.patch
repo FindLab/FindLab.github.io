@@ -1,0 +1,13 @@
+diff --git "a/themes/next/layout/_third-party/comments/gitalk.swig" "b/themes/next/layout/_third-party/comments/gitalk.swig"
+index 634eb06..3b0b70f 100644
+--- "a/themes/next/layout/_third-party/comments/gitalk.swig"
++++ "b/themes/next/layout/_third-party/comments/gitalk.swig"
+@@ -9,7 +9,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+   NexT.utils.getScript('{{ gitalk_js_uri }}', () => {
+     var gitalk = new Gitalk({
+       clientID    : '{{ theme.gitalk.client_id }}',
+-      clientSecret: '{{ theme.gitalk.client_secret }}',
++      clientSecret: '{{ theme.gitalk.client_secret || process.env.oauth_client_secret }}',
+       repo        : '{{ theme.gitalk.repo }}',
+       owner       : '{{ theme.gitalk.github_id }}',
+       admin       : ['{{ theme.gitalk.admin_user }}'],

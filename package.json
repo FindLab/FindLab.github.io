@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "cpx \"node_modules/hexo-theme-next/**/*\" themes/next && vue-cli-service build && hexo generate",
+    "build": "cpx \"node_modules/hexo-theme-next/**/*\" themes/next && git apply ./themes-mod.patch && vue-cli-service build && hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "serve": "hexo server",
