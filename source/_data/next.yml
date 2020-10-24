@@ -50,6 +50,6 @@ gitalk:
   github_id: FindLab
   repo: 'FindLab.github.io'
   client_id: '73a7d89d4b8dfc63f9f9'
-  #client_secret: '****************************************'
+  client_secret: 'b821242de63d2932741e3a99c65db76491052b5d'
   adminUser: FindLab
   distraction_free_mode: true
