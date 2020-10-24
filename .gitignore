@@ -10,3 +10,4 @@ themes/*
 yarn.lock
 source/vue/
 *.local
+.vscode/
