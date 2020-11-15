@@ -270,4 +270,4 @@ It still leaves over some pending issues with this language, we are considering 
 *	Partial measures & sub-measure time mark
 *	Anacrusis (upbeat beginning) music
 
-Welcome to discuss some more features you want.
+Welcome to discuss any more features you want.
