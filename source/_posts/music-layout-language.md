@@ -6,7 +6,11 @@ tags:
   - sheet music
   - DSL
   - lilypond
+author: k-l-lambda
+email: k.l.lambda@gmail.com
+date: 2020-11-15 16:55:39
 ---
+
 
 <style>
 	.highlight .gutter pre
