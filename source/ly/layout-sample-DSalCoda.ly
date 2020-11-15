@@ -9,10 +9,10 @@
 \include "lotus.ly"
 
 
-#(set-global-staff-size 32) 
+#(set-global-staff-size 28) 
 
 \paper {
-	paper-width = 26\cm
+	paper-width = 24\cm
 	paper-height = 12\cm
 	ragged-last = ##t
 }
