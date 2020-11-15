@@ -1168,7 +1168,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #a8f94d;
+  background: #ff466c;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2399,6 +2399,9 @@ hr {
 }
 figure {
   text-align: center;
+}
+figure pre {
+  text-align: justify;
 }
 figure img {
   margin-left: auto !important;
