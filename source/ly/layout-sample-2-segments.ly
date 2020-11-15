@@ -10,7 +10,7 @@
 #(set-global-staff-size 32) 
 
 \paper {
-	paper-width = 15\cm
+	paper-width = 28\cm
 	paper-height = 4\cm
 	system-system-spacing.basic-distance = #16
 	top-markup-spacing.basic-distance = #12
@@ -20,19 +20,17 @@
 
 \score {
 	\relative c' {
-		\repeat volta 2 {
-			c4 d e f
-			g f e d
-		}
-		c1 \bar "|."
+		c1 e g c \bar "||"
+		c,4 d e f g a b c
+		b a g f e d c \bar "|."
 	}
 	
 	\layout {
 		indent = #0
 	}
-	
 }
 
 
-% i: 2*[1, 2], 3
-% s: 2*[2] 1
+% i: [1, 2, 3, 4], [5, 6, 7, 8]
+% i: [1..4], [5..8]
+% s: 4 4
