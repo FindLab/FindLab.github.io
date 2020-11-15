@@ -145,7 +145,7 @@ Expanded measure index list:
 1 2 | 3 | 1 2 | 4
 ```
 
-Inside parantheses `{}` should be 2 or more measure segments or single measure indices.
+Inside braces `{}` should be 2 or more measure segments or single measure indices.
 
 
 Next, for some advanced repeat types.
@@ -190,6 +190,8 @@ Expanded measure index list:
 ```
 1 2 | 3 4 | 1 2
 ```
+
+Inside chevrons `<>` is a list of measure segments, which the first item of the list will be repeated once.
 
 ### Example 6, Dal Segno al Coda
 ![layout-sample-DSalCoda](/images/music-score/layout-sample-DSalCoda.svg)
@@ -248,6 +250,13 @@ Expanded measure index list:
 This is a video demo to illustrate how our new language code is working with Lilypond when composing a music score.
 
 {% youtube uUOV-Kjrt4M %}
+
+## Grammar live test
+
+We have implemented a basic grammar parser by [JISON](https://zaa.ch/jison/) (the javascript version of BISON).
+Try it yourself at this link:
+
+[**JISON debugger**](https://k-l-lambda.github.io/klstudio/jison-debugger/#grammar=https%3A%2F%2Fraw.githubusercontent.com%2Fk-l-lambda%2Flotus%2Fmaster%2Fjison%2FmeasureLayout.jison|2*%5B1..4%5D%7B5%2C6%7D)
 
 ## Next step
 
