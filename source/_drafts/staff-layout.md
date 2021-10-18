@@ -9,9 +9,9 @@ tags:
 ---
 
 
-<div class="vue-component midi-player" data-url="/midi/Minuets_in_G_major.mid"></div>
+<div class="vue-component staff-layout-viewer"></div>
 
 
 
 <script src="/vue/chunk-vendors.js"></script>
-<script src="/vue/midi-player.js"></script>
+<script src="/vue/staff-layout-viewer.js"></script>

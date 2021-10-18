@@ -10,6 +10,7 @@ const entries = [
 	"midi-pitches-mask",
 	"midi-head-mask",
 	"chart",
+	"staff-layout-viewer",
 ];
 
 
