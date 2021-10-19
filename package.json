@@ -9,7 +9,7 @@
     "serve": "hexo server",
     "serve:draft": "hexo server --draft",
     "vue-build": "vue-cli-service build",
-    "vue-serve": "vue-cli-service serve"
+    "vue-serve": "vue-cli-service serve --mode production"
   },
   "hexo": {
     "version": "4.2.0"
@@ -35,11 +35,12 @@
   },
   "devDependencies": {
     "@k-l-lambda/web-widgets": "^0.2.7",
-    "@vue/cli-plugin-babel": "^4.1.0",
-    "@vue/cli-plugin-eslint": "^4.1.0",
-    "@vue/cli-service": "^4.1.0",
+    "@vue/cli-plugin-babel": "^4.2.3",
+    "@vue/cli-plugin-eslint": "^4.2.3",
+    "@vue/cli-service": "^4.2.3",
     "babel-eslint": "^10.0.3",
     "cpx": "^1.5.0",
+    "css-loader": "^2.1.0",
     "echarts": "^4.6.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
@@ -47,8 +48,8 @@
     "gulp-eslint": "^6.0.0",
     "gulp-shell": "^0.8.0",
     "lodash": "^4.17.15",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^8.0.2",
     "typescript": "~3.5.3",
     "v-charts": "^1.19.0",
     "vue-template-compiler": "^2.6.10"

@@ -1,11 +1,267 @@
 <template>
-	<div>
-		staff-layout
+	<div class="staff-layout-viewer">
+		<header class="control">
+			<input type="text" class="code" v-model="code" placeholder="staff layout code" />
+			<input type="text" class="mask" v-model.lazy="binaryMask" placeholder="staff mask code" />
+		</header>
+		<main>
+			<div class="error" v-if="error">
+				{{error}}
+			</div>
+			<svg class="graph" v-if="layout" width="800" :viewBox="viewbox">
+				<defs>
+					<g id="staff">
+						<line v-for="l in 5" :key="l" class="staff-line"
+							:x1="0"
+							:x2="16"
+							:y1="l - 3"
+							:y2="l - 3"
+						/>
+						<line class="measure-bar"
+							:x1="12"
+							:x2="12"
+							:y1="-2"
+							:y2="2"
+						/>
+					</g>
+				</defs>
+				<g class="system" transform="translate(32, 4)">
+					<line class="head-connection" v-if="maskedLayout.staffIds.length > 1"
+						:x1="0"
+						:x2="0"
+						:y1="0"
+						:y2="(maskedLayout.staffIds.length - 1) * 10 + 4"
+					/>
+					<g class="staff" v-for="(id, i) of maskedLayout.staffIds" :key="id"
+						:transform="`translate(0, ${i * 10 + 2})`"
+					>
+						<use xlink:href="#staff" />
+						<text class="staff-id"
+							:x="18"
+							:y="1"
+						>
+							{{id}}
+						</text>
+					</g>
+					<g>
+						<g class="conjunction" v-for="(conjunction, i) of maskedLayout.conjunctions" :key="i">
+							<line class="measure-bar" v-show="conjunction > 0"
+								:class="{dashed: conjunction === 1}"
+								:x1="12"
+								:x2="12"
+								:y1="i * 10 + 4"
+								:y2="(i + 1) * 10"
+							/>
+						</g>
+					</g>
+					<StaffBrackets ref="brackets"
+						:layout="maskedLayout"
+						:positions="positions"
+						:nameDict="nameDict"
+					/>
+				</g>
+			</svg>
+			<table class="group-names" v-if="layout">
+				<tr v-for="g of layout.groups" :key="g.key"
+					:class="{disabled: isGroupDisabled(g)}"
+				>
+					<th>
+						{{g.key}}
+						<span v-if="g.group.grand">*</span>
+					</th>
+					<td>
+						<input type="text" v-model="nameDict[g.key]" />
+					</td>
+				</tr>
+			</table>
+		</main>
 	</div>
 </template>
 
 <script>
+	import {debounce} from "lodash";
+
+	import StaffBrackets from "./staff-brackets.vue";
+
+	import * as staffLayout from "../staffLayout";
+
+
+
 	export default {
 		name: "staff-layout-viewer",
+
+
+		components: {
+			StaffBrackets,
+		},
+
+
+		data () {
+			return {
+				code: "",
+				layout: null,
+				mask: 0,
+				error: null,
+				nameDict: {},
+			};
+		},
+
+
+		computed: {
+			stavesCount () {
+				if (!this.layout)
+					return null;
+
+				return this.layout.stavesCount;
+			},
+
+
+			viewbox () {
+				if (!this.layout)
+					return null;
+
+				return `0 0 80 ${this.stavesCount * 10 + 2}`;
+			},
+
+
+			positions () {
+				if (!this.stavesCount)
+					return null;
+
+				return Array(this.maskedLayout.staffIds.length).fill(null).map((_, i) => ({
+					y: i * 10 + 2,
+					radius: 2,
+				}));
+			},
+
+
+			binaryMask: {
+				get () {
+					const code = this.mask.toString(2);
+					const pad = (code.length < this.stavesCount ? "0".repeat(this.stavesCount - code.length) : "") + code;
+					return pad.split("").reverse().join("");
+				},
+
+				set (value) {
+					const reversed = value.split("").reverse().join("");
+					this.mask = parseInt(reversed, 2);
+				},
+			},
+
+
+			maskedLayout () {
+				return this.layout && this.layout.mask(this.mask);
+			},
+		},
+
+
+		created () {
+			this.updateLayout();
+		},
+
+
+		methods: {
+			async updateLayout () {
+				this.layout = null;
+				this.error = null;
+				this.mask = 0;
+
+				try {
+					this.layout = await staffLayout.parseCode(this.code);
+					this.mask = 2 ** this.layout.stavesCount - 1;
+				}
+				catch (err) {
+					this.error = err;
+				}
+			},
+
+
+			isGroupDisabled (group) {
+				return !Array(group.range[1] + 1 - group.range[0]).fill(null).some((_, i) => this.mask & (1 << (group.range[0] + i)));
+			},
+		},
+
+
+		watch: {
+			code: debounce(function () {
+				this.updateLayout();
+			}, 600),
+		},
 	};
 </script>
+
+<style lang="scss" scoped>
+	header
+	{
+		text-align: center;
+		padding: 1em;
+
+		.code
+		{
+			width: 20em;
+		}
+	}
+
+	main
+	{
+		text-align: center;
+
+		.error
+		{
+			color: #a00;
+		}
+
+		.error, .graph, .group-names
+		{
+			display: inline-block;
+			vertical-align: top;
+		}
+	}
+
+	.graph
+	{
+		line
+		{
+			stroke: currentColor;
+		}
+
+		.staff-line
+		{
+			stroke-width: 0.1;
+		}
+
+		.measure-bar
+		{
+			stroke-width: 0.1;
+
+			&.dashed
+			{
+				stroke-dasharray: 0.3 0.3;
+			}
+		}
+
+		.head-connection
+		{
+			stroke-width: 0.1;
+		}
+
+		.staff-id
+		{
+			font-size: 2px;
+			fill: steelblue;
+		}
+	}
+
+	.group-names
+	{
+		tr.disabled
+		{
+			color: #ccc;
+
+			input
+			{
+				color: #ccc;
+			}
+		}
+	}
+</style>
