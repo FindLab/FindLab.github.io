@@ -1,14 +1,16 @@
 <template>
-	<div class="staff-layout-viewer">
+	<div class="staff-layout-viewer"
+		:class="{readonly: readOnly}"
+	>
 		<header class="control">
-			<input type="text" class="code" v-model="code" placeholder="staff layout code" />
-			<input type="text" class="mask" v-model.lazy="binaryMask" placeholder="staff mask code" />
+			code:<input type="text" class="code" v-model="code" placeholder="staff layout code" :disabled="readOnly" />
+			<input type="text" class="mask" v-if="showMask" v-model.lazy="binaryMask" placeholder="staff mask code" />
 		</header>
 		<main>
 			<div class="error" v-if="error">
 				{{error}}
 			</div>
-			<svg class="graph" v-if="layout" width="800" :viewBox="viewbox">
+			<svg class="graph" v-if="layout" width="400" :viewBox="viewbox">
 				<defs>
 					<g id="staff">
 						<line v-for="l in 5" :key="l" class="staff-line"
@@ -25,7 +27,7 @@
 						/>
 					</g>
 				</defs>
-				<g class="system" transform="translate(32, 4)">
+				<g class="system" transform="translate(16, 4)">
 					<line class="head-connection" v-if="maskedLayout.staffIds.length > 1"
 						:x1="0"
 						:x2="0"
@@ -64,13 +66,14 @@
 			<table class="group-names" v-if="layout">
 				<tr v-for="g of layout.groups" :key="g.key"
 					:class="{disabled: isGroupDisabled(g)}"
+					v-show="!readOnly || nameDict[g.key]"
 				>
 					<th>
 						{{g.key}}
-						<span v-if="g.group.grand">*</span>
+						<!--span v-if="g.group.grand">*</span-->
 					</th>
 					<td>
-						<input type="text" v-model="nameDict[g.key]" />
+						<input type="text" v-model="nameDict[g.key]" :disabled="readOnly" />
 					</td>
 				</tr>
 			</table>
@@ -96,9 +99,16 @@
 		},
 
 
+		props: {
+			initCode: String,
+			readOnly: Boolean,
+			showMask: Boolean,
+		},
+
+
 		data () {
 			return {
-				code: "",
+				code: this.initCode || "",
 				layout: null,
 				mask: 0,
 				error: null,
@@ -120,7 +130,7 @@
 				if (!this.layout)
 					return null;
 
-				return `0 0 80 ${this.stavesCount * 10 + 2}`;
+				return `0 0 40 ${this.stavesCount * 10 + 2}`;
 			},
 
 
@@ -157,6 +167,7 @@
 
 		created () {
 			this.updateLayout();
+			console.log("v:", this);
 		},
 
 
@@ -199,6 +210,15 @@
 		.code
 		{
 			width: 20em;
+			font-weight: bold;
+		}
+	}
+
+	.readonly
+	{
+		input
+		{
+			border: 0;
 		}
 	}
 
