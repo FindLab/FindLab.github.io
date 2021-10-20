@@ -69,7 +69,7 @@
 					v-show="!readOnly || nameDict[g.key]"
 				>
 					<th>
-						{{g.key}}
+						{{g.key}}:
 						<!--span v-if="g.group.grand">*</span-->
 					</th>
 					<td>
@@ -101,6 +101,7 @@
 
 		props: {
 			initCode: String,
+			initNameDict: String,
 			readOnly: Boolean,
 			showMask: Boolean,
 		},
@@ -112,7 +113,7 @@
 				layout: null,
 				mask: 0,
 				error: null,
-				nameDict: {},
+				nameDict: this.initNameDict ? eval(`(${this.initNameDict})`) : {},
 			};
 		},
 
