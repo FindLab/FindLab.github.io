@@ -203,6 +203,12 @@
 </script>
 
 <style lang="scss" scoped>
+	.staff-layout-viewer
+	{
+		border: 1px solid #ccc;
+		margin: 2em;
+	}
+
 	header
 	{
 		text-align: center;
@@ -210,6 +216,7 @@
 
 		.code
 		{
+			margin-left: 1em;
 			width: 20em;
 			font-weight: bold;
 		}
@@ -226,6 +233,7 @@
 	main
 	{
 		text-align: center;
+		white-space: nowrap;
 
 		.error
 		{
@@ -275,6 +283,9 @@
 
 	.group-names
 	{
+		margin-left: 2em;
+		width: unset;
+
 		tr.disabled
 		{
 			color: #ccc;
@@ -283,6 +294,19 @@
 			{
 				color: #ccc;
 			}
+		}
+
+		td
+		{
+			input
+			{
+				width: 10em;
+			}
+		}
+
+		th, td
+		{
+			border: 0;
 		}
 	}
 </style>

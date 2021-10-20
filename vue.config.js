@@ -16,7 +16,7 @@ const entries = [
 
 
 module.exports = {
-	publicPath: "./",
+	publicPath: "/vue/",
 	outputDir: "./source/vue",
 	filenameHashing: false,
 	pages: entries.reduce((table, name) => ({...table, [name]: {
