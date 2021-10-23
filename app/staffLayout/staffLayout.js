@@ -159,7 +159,11 @@ class StaffLayout {
 				ids = [ids[0], ids[0]];
 			const range = ids.map(id => this.staffIds.indexOf(id));
 
+			const cons = this.conjunctions.slice(range[0], range[1]);
+			const bar = cons.length ? Math.min(...cons) : 0;
+
 			group.key = key;
+			group.bar = bar;
 
 			return {
 				group,

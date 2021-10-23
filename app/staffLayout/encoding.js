@@ -69,36 +69,38 @@ const GROUP_SYMBOLS = [
 ];
 
 
-const stateMusicxmlGroup = (statements, staffGroup, keys, nameDict, indent = 0) => {
+const stateMusicxmlGroup = (statements, group, keys, nameDict, indent = 0) => {
 	const indentTabs = tabs(indent);
 
-	if (staffGroup.grand) {
-		statements.push(indentTabs + `<score-part id="${staffGroup.key}">`);
+	const number = keys.indexOf(group.key) + 1;
+	const name = nameDict[group.key];
+
+	if (group.grand) {
+		statements.push(indentTabs + `<score-part id="${group.key}">`);
+		if (name)
+			statements.push(indentTabs + `	<part-name>${name}</part-name>`);
+		statements.push(indentTabs + "</score-part>");
 
 		return;
 	}
 
-	const number = keys.indexOf(staffGroup.key) + 1;
-	const name = nameDict[staffGroup.key];
-
-	if (staffGroup.type > 0 || name) {
+	if (group.type > 0 || name) {
 		statements.push(indentTabs + `<part-group number="${number}" type="start">`);
-		statements.push(indentTabs + `	<group-symbol>${GROUP_SYMBOLS[staffGroup.type]}</group-symbol>`);
-		statements.push(indentTabs + `	<group-name>${name}</group-name>`);
+		statements.push(indentTabs + `	<group-symbol>${GROUP_SYMBOLS[group.type]}</group-symbol>`);
+		if (name)
+			statements.push(indentTabs + `	<group-name>${name}</group-name>`);
+		statements.push(indentTabs + `	<group-barline>${group.bar > 1 ? "yes" : "no"}</group-barline>`);
 		statements.push(indentTabs + "</part-group>");
 	}
 
-	if (staffGroup.subs)
-		staffGroup.subs.forEach(group => stateMusicxmlGroup(statements, group, keys, nameDict, indent + 1));
+	if (group.subs)
+		group.subs.forEach(group => stateMusicxmlGroup(statements, group, keys, nameDict, indent + 1));
 
-	if (staffGroup.staff)
-		statements.push(indentTabs + `<score-part id="${staffGroup.key}">`);
+	if (group.staff)
+		statements.push(indentTabs + `<score-part id="${group.key}">`);
 
-	if (staffGroup.type > 0 || name) {
-		statements.push(indentTabs + `<part-group number="${number}" type="stop">`);
-		statements.push(indentTabs + `	<group-symbol>${GROUP_SYMBOLS[staffGroup.type]}</group-symbol>`);
-		statements.push(indentTabs + "</part-group>");
-	}
+	if (group.type > 0 || name)
+		statements.push(indentTabs + `<part-group number="${number}" type="stop" />`);
 };
 
 
@@ -111,6 +113,39 @@ const encodeMusicxml = (layout, nameDict) => {
 };
 
 
+const bool = x => x ? "true" : "false";
+
+
+const stateMEIGroup = (statements, group, nameDict, ids, indent = 0) => {
+	const indentTabs = tabs(indent);
+
+	const name = nameDict[group.key];
+
+	if (group.subs) {
+		const symbol = GROUP_SYMBOLS[group.type] ? ` symbol="${GROUP_SYMBOLS[group.type]}"` : "";
+		statements.push(indentTabs + `<staffGrp bar.thru="${bool(group.bar > 1)}"${symbol}>`);
+
+		if (name)
+			statements.push(indentTabs + `	<label>${name}</label>`);
+
+		group.subs.forEach(group => stateMEIGroup(statements, group, nameDict, ids, indent + 1));
+
+		statements.push(indentTabs + "</staffGrp>");
+	}
+
+	if (group.staff)
+		statements.push(indentTabs + `<staffDef n="${ids.indexOf(group.staff) + 1}">`);
+};
+
+
+const encodeMEI = (layout, nameDict) => {
+	const statements = [];
+	stateMEIGroup(statements, layout.group, nameDict, layout.staffIds);
+
+	return statements.join("\n");
+};
+
+
 const encode = (lang, layout, nameDict) => {
 	switch (lang) {
 	case "Lilypond":
@@ -118,6 +153,9 @@ const encode = (lang, layout, nameDict) => {
 
 	case "MusicXML":
 		return encodeMusicxml(layout, nameDict);
+
+	case "MEI":
+		return encodeMEI(layout, nameDict);
 	}
 };
 

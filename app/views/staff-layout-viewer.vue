@@ -150,7 +150,7 @@
 				error: null,
 				nameDict: this.initNameDict ? eval(`(${this.initNameDict})`) : {},
 				exportLang: null,
-				langs: ["Lilypond", "MusicXML"],
+				langs: ["Lilypond", "MusicXML", "MEI"],
 			};
 		},
 
