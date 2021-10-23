@@ -28,7 +28,7 @@
 						/>
 					</g>
 				</defs>
-				<g class="system" transform="translate(0, 4)">
+				<g class="system" transform="translate(-2, 4)">
 					<line class="head-connection" v-if="maskedLayout.staffIds.length > 1"
 						:x1="0"
 						:x2="0"
@@ -40,10 +40,11 @@
 					>
 						<use xlink:href="#staff" />
 						<text class="staff-id"
-							:x="18"
+							:x="17"
 							:y="1"
 						>
 							{{id}}
+							<title>{{id}}</title>
 						</text>
 					</g>
 					<g>

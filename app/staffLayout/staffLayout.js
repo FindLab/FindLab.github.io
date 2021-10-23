@@ -52,7 +52,7 @@ const makeUniqueName = (set, index, prefix) => {
 		name += "_" + index.toString();
 
 	while (set.has(name))
-		name += "_" + randomB64();
+		name = (prefix ? prefix + "_" : "") + randomB64();
 
 	return name;
 };
