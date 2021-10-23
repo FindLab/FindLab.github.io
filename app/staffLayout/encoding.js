@@ -73,7 +73,7 @@ const GROUP_SYMBOLS = [
 ];
 
 
-const stateMusicxmlGroup = (statements, group, keys, nameDict, indent = 0) => {
+const stateMusicxmlGroup = (statements, group, keys, nameDict, indent = 1) => {
 	const indentTabs = tabs(indent);
 
 	const number = keys.indexOf(group.key) + 1;
@@ -98,7 +98,7 @@ const stateMusicxmlGroup = (statements, group, keys, nameDict, indent = 0) => {
 	}
 
 	if (group.subs)
-		group.subs.forEach(group => stateMusicxmlGroup(statements, group, keys, nameDict, indent + 1));
+		group.subs.forEach(group => stateMusicxmlGroup(statements, group, keys, nameDict, indent));
 
 	if (group.staff)
 		statements.push(indentTabs + `<score-part id="${group.key}">`);

@@ -385,7 +385,7 @@
 			{
 				display: inline-block;
 				margin: 0 .5em;
-				padding: .4em;
+				padding: .1em .4em;
 				background: #eee;
 				cursor: pointer;
 				text-decoration: underline;
@@ -406,6 +406,7 @@
 		{
 			width: 48em;
 			height: 12em;
+			font-family: monospace;
 		}
 	}
 </style>
