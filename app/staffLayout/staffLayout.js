@@ -159,6 +159,8 @@ class StaffLayout {
 				ids = [ids[0], ids[0]];
 			const range = ids.map(id => this.staffIds.indexOf(id));
 
+			group.key = key;
+
 			return {
 				group,
 				range,

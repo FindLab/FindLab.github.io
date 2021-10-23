@@ -98,6 +98,15 @@
 					</td>
 				</tr>
 			</table>
+			<div class="export">
+				Encode as: <ul>
+					<li v-for="lang of langs" :key="lang" v-text="lang"
+						:class="{chosen: exportLang === lang}"
+						@click="exportLang = exportLang === lang ? null : lang"
+					></li>
+				</ul>
+				<textarea v-if="exportLang" :value="exportCode" readonly="readonly" @click="$event.target.select()"></textarea>
+			</div>
 		</main>
 	</div>
 </template>
@@ -140,6 +149,8 @@
 				mask: 0,
 				error: null,
 				nameDict: this.initNameDict ? eval(`(${this.initNameDict})`) : {},
+				exportLang: null,
+				langs: ["Lilypond"],
 			};
 		},
 
@@ -189,6 +200,14 @@
 			maskedLayout () {
 				return this.layout && this.layout.mask(this.mask);
 			},
+
+
+			exportCode () {
+				if (!this.layout || !this.exportLang)
+					return "";
+
+				return staffLayout.encode(this.exportLang, this.layout.group, this.nameDict);
+			},
 		},
 
 
@@ -233,18 +252,18 @@
 	{
 		border: 1px solid #ccc;
 		margin: 2em;
-	}
 
-	header
-	{
-		text-align: center;
-		padding: 1em;
-
-		.code
+		& > header
 		{
-			margin-left: 1em;
-			width: 20em;
-			font-weight: bold;
+			text-align: center;
+			padding: 1em;
+
+			.code
+			{
+				margin-left: 1em;
+				width: 20em;
+				font-weight: bold;
+			}
 		}
 	}
 
@@ -349,6 +368,42 @@
 		th, td
 		{
 			border: 0;
+		}
+	}
+
+	.export
+	{
+		text-align: left;
+
+		ul
+		{
+			display: block;
+			padding: 0;
+
+			li
+			{
+				display: inline-block;
+				margin: 0 1em;
+				padding: .2em;
+				background: #eee;
+				cursor: pointer;
+
+				&:hover
+				{
+					outline: solid 2px #777;
+				}
+
+				&.chosen
+				{
+					font-weight: bold;
+				}
+			}
+		}
+
+		textarea
+		{
+			width: 48em;
+			height: 12em;
 		}
 	}
 </style>
