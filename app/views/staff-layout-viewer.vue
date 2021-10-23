@@ -3,7 +3,8 @@
 		:class="{readonly: readOnly}"
 	>
 		<header class="control">
-			code:<input type="text" class="code" v-model="code" placeholder="staff layout code" :disabled="readOnly" />
+			code:<input type="text" class="code" v-if="!readOnly" v-model="code" placeholder="staff layout code" :disabled="readOnly" />
+			<strong class="code" v-if="readOnly" v-text="code"></strong>
 			<input type="text" class="mask" v-if="showMask" v-model.lazy="binaryMask" placeholder="staff mask code" />
 		</header>
 		<main>
@@ -27,7 +28,7 @@
 						/>
 					</g>
 				</defs>
-				<g class="system" transform="translate(16, 4)">
+				<g class="system" transform="translate(0, 4)">
 					<line class="head-connection" v-if="maskedLayout.staffIds.length > 1"
 						:x1="0"
 						:x2="0"
@@ -104,6 +105,10 @@
 			initNameDict: String,
 			readOnly: Boolean,
 			showMask: Boolean,
+			scale: {
+				type: Number,
+				default: 1,
+			},
 		},
 
 
@@ -131,7 +136,7 @@
 				if (!this.layout)
 					return null;
 
-				return `0 0 40 ${this.stavesCount * 10 + 2}`;
+				return `${-20 / this.scale} 0 ${40 / this.scale} ${this.stavesCount * 10 + 2}`;
 			},
 
 
