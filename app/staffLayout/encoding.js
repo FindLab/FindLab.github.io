@@ -17,8 +17,12 @@ const lilyStaffGroup = (staffGroup, nameDict, indent = 0) => {
 
 	const headerStatement = () => headers.length > 0 ? `\\with { ${headers.join(" ")} } ` : "";
 
-	if (staffGroup.type !== StaffGroupType.Default) {
+	if (staffGroup.type !== StaffGroupType.Default || staffGroup.subs) {
 		switch (staffGroup.type) {
+		case StaffGroupType.Default:
+			result += tabs(indent) + "<<\n";
+			break;
+
 		case StaffGroupType.Brace:
 			result += tabs(indent) + `\\new GrandStaff ${headerStatement()}<<\n`;
 			break;
@@ -48,7 +52,7 @@ const lilyStaffGroup = (staffGroup, nameDict, indent = 0) => {
 			result += lilyStaffGroup(sub, nameDict, indent);
 	}
 
-	if (staffGroup.type !== StaffGroupType.Default) {
+	if (staffGroup.type !== StaffGroupType.Default || staffGroup.subs) {
 		--indent;
 		result += tabs(indent) + ">>\n";
 	}
