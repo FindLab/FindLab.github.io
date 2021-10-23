@@ -38,7 +38,7 @@ const lilyStaffGroup = (staffGroup, nameDict, indent = 0) => {
 
 	if (staffGroup.staff) {
 		//console.assert(statementDict[staffGroup.staff], "unknown staff id:", staffGroup.staff, Object.keys(statementDict), staffGroup);
-		const statement = `\\new Staff "${staffGroup.staff}" {}`;
+		const statement = `\\new Staff "${staffGroup.staff}" ${headerStatement()}{}`;
 
 		result += indentParagraph(statement, indent);
 		result += "\n";

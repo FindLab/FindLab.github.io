@@ -373,6 +373,7 @@
 
 	.export
 	{
+		padding: 1em;
 		text-align: left;
 
 		ul
@@ -384,9 +385,10 @@
 			{
 				display: inline-block;
 				margin: 0 1em;
-				padding: .2em;
+				padding: .4em;
 				background: #eee;
 				cursor: pointer;
+				text-decoration: underline;
 
 				&:hover
 				{
