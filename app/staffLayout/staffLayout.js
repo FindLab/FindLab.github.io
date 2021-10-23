@@ -149,6 +149,8 @@ class StaffLayout {
 		this.group = {type: StaffGroupType.Default};
 		makeGroupsFromRaw(this.group, seq);
 
+		this.bounds = raw.map(item => [item.leftBounds.join(""), item.rightBounds.join("")]);
+
 		const dict = {};
 		groupDict(this.group, dict);
 		this.groups = Object.entries(dict).map(([key, group]) => {
@@ -195,6 +197,7 @@ class StaffLayout {
 				staffIds: layout.staffIds,
 				conjunctions: layout.conjunctions,
 				groups: layout.groups,
+				bounds: layout.bounds,
 			};
 		}
 

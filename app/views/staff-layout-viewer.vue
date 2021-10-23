@@ -39,13 +39,32 @@
 						:transform="`translate(0, ${i * 10 + 2})`"
 					>
 						<use xlink:href="#staff" />
-						<text class="staff-id"
-							:x="17"
-							:y="1"
+					</g>
+					<g class="annotation">
+						<g class="staff" v-for="(id, i) of maskedLayout.staffIds" :key="id"
+							:transform="`translate(17, ${i * 10 + 2})`"
 						>
-							{{id}}
-							<title>{{id}}</title>
-						</text>
+							<text class="staff-id" y="0.6"
+							>
+								{{id}}
+								<title>{{id}}</title>
+							</text>
+						</g>
+						<g v-if="showAnnotation"
+							transform="translate(-6, 0)"
+						>
+							<g class="conjunction" v-for="(conjunction, i) of maskedLayout.conjunctions" :key="i"
+								:transform="`translate(0, ${i * 10 + 7})`"
+							>
+								<text class="vertical">{{",.-"[conjunction]}}</text>
+							</g>
+							<g class="bound" v-for="(bound, i) of maskedLayout.bounds" :key="`b${i}`"
+								:transform="`translate(0, ${i * 10 + 2})`"
+							>
+								<text class="vertical" v-if="bound[0]" x="-3.6">{{bound[0]}}</text>
+								<text class="vertical" v-if="bound[1]" x="2.2">{{bound[1]}}</text>
+							</g>
+						</g>
 					</g>
 					<g>
 						<g class="conjunction" v-for="(conjunction, i) of maskedLayout.conjunctions" :key="i">
@@ -106,6 +125,7 @@
 			initNameDict: String,
 			readOnly: Boolean,
 			showMask: Boolean,
+			showAnnotation: Boolean,
 			scale: {
 				type: Number,
 				default: 1,
@@ -280,10 +300,26 @@
 			stroke-width: 0.1;
 		}
 
-		.staff-id
+		.annotation
 		{
-			font-size: 2px;
-			fill: steelblue;
+			text
+			{
+				font-size: 2.4px;
+				fill: steelblue;
+
+				&.vertical
+				{
+					transform: rotate(90deg);
+				}
+			}
+
+			.bound
+			{
+				text
+				{
+					font-size: 2px;
+				}
+			}
 		}
 	}
 
