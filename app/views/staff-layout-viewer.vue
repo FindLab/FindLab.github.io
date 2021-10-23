@@ -51,7 +51,7 @@
 							</text>
 						</g>
 						<g v-if="showAnnotation"
-							transform="translate(-6, 0)"
+							transform="translate(-12, 0)"
 						>
 							<g class="conjunction" v-for="(conjunction, i) of maskedLayout.conjunctions" :key="i"
 								:transform="`translate(0, ${i * 10 + 7})`"
