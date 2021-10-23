@@ -56,15 +56,68 @@ const lilyStaffGroup = (staffGroup, nameDict, indent = 0) => {
 	return result;
 };
 
-const encodeLilypond = (staffGroup, nameDict) => {
-	return lilyStaffGroup(staffGroup, nameDict);
+const encodeLilypond = (layout, nameDict) => {
+	return lilyStaffGroup(layout.group, nameDict);
 };
 
 
-const encode = (lang, staffGroup, nameDict) => {
+const GROUP_SYMBOLS = [
+	null,
+	"brace",
+	"bracket",
+	"square",
+];
+
+
+const stateMusicxmlGroup = (statements, staffGroup, keys, nameDict, indent = 0) => {
+	const indentTabs = tabs(indent);
+
+	if (staffGroup.grand) {
+		statements.push(indentTabs + `<score-part id="${staffGroup.key}">`);
+
+		return;
+	}
+
+	const number = keys.indexOf(staffGroup.key) + 1;
+	const name = nameDict[staffGroup.key];
+
+	if (staffGroup.type > 0 || name) {
+		statements.push(indentTabs + `<part-group number="${number}" type="start">`);
+		statements.push(indentTabs + `	<group-symbol>${GROUP_SYMBOLS[staffGroup.type]}</group-symbol>`);
+		statements.push(indentTabs + `	<group-name>${name}</group-name>`);
+		statements.push(indentTabs + "</part-group>");
+	}
+
+	if (staffGroup.subs)
+		staffGroup.subs.forEach(group => stateMusicxmlGroup(statements, group, keys, nameDict, indent + 1));
+
+	if (staffGroup.staff)
+		statements.push(indentTabs + `<score-part id="${staffGroup.key}">`);
+
+	if (staffGroup.type > 0 || name) {
+		statements.push(indentTabs + `<part-group number="${number}" type="stop">`);
+		statements.push(indentTabs + `	<group-symbol>${GROUP_SYMBOLS[staffGroup.type]}</group-symbol>`);
+		statements.push(indentTabs + "</part-group>");
+	}
+};
+
+
+const encodeMusicxml = (layout, nameDict) => {
+	const statements = [];
+	const keys = layout.groups.map(g => g.key);
+	stateMusicxmlGroup(statements, layout.group, keys, nameDict);
+
+	return `<part-list>\n${statements.join("\n")}\n</part-list>`;
+};
+
+
+const encode = (lang, layout, nameDict) => {
 	switch (lang) {
 	case "Lilypond":
-		return encodeLilypond(staffGroup, nameDict);
+		return encodeLilypond(layout, nameDict);
+
+	case "MusicXML":
+		return encodeMusicxml(layout, nameDict);
 	}
 };
 

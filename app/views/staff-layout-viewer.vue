@@ -150,7 +150,7 @@
 				error: null,
 				nameDict: this.initNameDict ? eval(`(${this.initNameDict})`) : {},
 				exportLang: null,
-				langs: ["Lilypond"],
+				langs: ["Lilypond", "MusicXML"],
 			};
 		},
 
@@ -206,7 +206,7 @@
 				if (!this.layout || !this.exportLang)
 					return "";
 
-				return staffLayout.encode(this.exportLang, this.layout.group, this.nameDict);
+				return staffLayout.encode(this.exportLang, this.layout, this.nameDict);
 			},
 		},
 
@@ -384,7 +384,7 @@
 			li
 			{
 				display: inline-block;
-				margin: 0 1em;
+				margin: 0 .5em;
 				padding: .4em;
 				background: #eee;
 				cursor: pointer;
