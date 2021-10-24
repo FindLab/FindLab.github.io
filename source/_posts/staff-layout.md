@@ -2,11 +2,13 @@
 author: k-l-lambda
 email: k.l.lambda@gmail.com
 title: A concise representation of sheet music vertical structure
-coauthor: k-l-lambda
 tags:
   - sheet music
   - DSL
+coauthor: k-l-lambda
+date: 2021-10-24 12:50:29
 ---
+
 
 In the previous post [A domain-specific language for sheet music paragraph layout](/2020/11/15/music-layout-language/),
 we discussed how to concisely represent sheet music paragraph structure in computer.
