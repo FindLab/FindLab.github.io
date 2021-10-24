@@ -267,6 +267,14 @@
 		}
 	}
 
+	@media screen and (max-width: 800px)
+	{
+		.staff-layout-viewer
+		{
+			zoom: 0.5;
+		}
+	}
+
 	.readonly
 	{
 		input
