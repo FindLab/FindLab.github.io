@@ -23,6 +23,8 @@ Orthogonally, we also need to express the sheet music vertical structure: instru
 </figure>
 
 We aim to do this concisely and intuitively.
+And this will be a meta-language which can be exported to other music languges,
+such as [Lilypond](https://lilypond.org/), [MusicXML](https://www.musicxml.com/) and [MEI](https://music-encoding.org/).
 
 <!-- more -->
 
@@ -48,7 +50,7 @@ And the blank type is default, can be ignored:
 
 <div class="vue-component staff-layout-viewer" data-init-code=" , , " data-read-only="1"></div>
 
-Staff names is not required to specific. Unnamed staves have number name by default.
+Staff names is not required to specify. Unnamed staves have number name by default.
 As a result, the empty string "" is a valid staff layout code, and it represents an anonymous single staff:
 
 <div class="vue-component staff-layout-viewer" data-init-code=" " data-read-only="1"></div>
@@ -80,6 +82,8 @@ For [the example picture](/images/conductor-music-score-sample.png) above, the c
 Try to customize your own staff layout in below.
 
 <div class="vue-component staff-layout-viewer" data-init-code="{-}{-}" data-init-name-dict="{'1-2': 'Piano I', '3-4': 'Piano II'}"></div>
+
+We will open source the language library after some arrangement work.
 
 
 
