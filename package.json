@@ -29,9 +29,9 @@
     "hexo-renderer-stylus": "^1.1.0",
     "hexo-server": "^1.0.0",
     "hexo-theme-next": "theme-next/hexo-theme-next",
-    "vue": "^2.6.11",
-    "vue-class-component": "^7.0.2",
-    "vue-property-decorator": "^8.3.0"
+    "vue": "2.6.11",
+    "vue-class-component": "7.0.2",
+    "vue-property-decorator": "8.3.0"
   },
   "devDependencies": {
     "@k-l-lambda/web-widgets": "^0.2.7",
